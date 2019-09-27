@@ -12,10 +12,10 @@ inputs:
     description: 'OS distribution name'
     required: false
     default: 'ubuntu:18.04'
-  commands:
-    description: 'One or more commands to execute'
+  command:
+    description: 'Command to execute'
     required: true
 runs:
     using: 'docker'
     image: 'Dockerfile'
-    args: ${{ inputs.commands }}
+    args: ${{ inputs.command }}

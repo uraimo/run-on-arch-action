@@ -10,6 +10,5 @@ jobs:
     - name: Run uname on arm64
       uses: uraimo/multiarch-actions/run-on-arch
       with:
-        commands:
+        command:
             - 'one'
-            - 'two'
