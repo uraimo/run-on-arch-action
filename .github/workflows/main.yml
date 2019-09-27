@@ -10,4 +10,7 @@ jobs:
     - name: Run uname on arm64
       uses: uraimo/multiarch-actions/run-on-arch@master
       with:
-        command: 'uname -a'
+        command: >-
+            uname -a;
+            free;
+            echo "Done."
