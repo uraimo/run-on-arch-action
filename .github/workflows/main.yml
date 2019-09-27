@@ -11,6 +11,6 @@ jobs:
       uses: uraimo/multiarch-actions/run-on-arch@master
       with:
         command: >-
-            uname -a;
-            free;
+            uname -a ;
+            free ;
             echo "Done."
