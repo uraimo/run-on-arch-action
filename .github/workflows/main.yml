@@ -6,8 +6,8 @@ jobs:
     name: A job to test the multi architecture actions
     steps:
     - name: Setup
-      uses: uraimo/multiarch-actions/setup-multiarch
+      uses: uraimo/multiarch-actions/setup-multiarch@master
     - name: Run uname on arm64
-      uses: uraimo/multiarch-actions/run-on-arch
+      uses: uraimo/multiarch-actions/run-on-arch@master
       with:
         command: 'one'
