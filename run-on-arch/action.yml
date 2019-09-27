@@ -6,12 +6,16 @@ description: 'Run something in a container with a specific architecture'
 inputs:
   architecture:
     description: 'Architecture type'
-    required: true
+    required: false
     default: 'arm64v8'
   distribution:
     description: 'OS distribution name'
-    required: true
+    required: false
     default: 'ubuntu:18.04'
+  commands:
+    description: 'One or more commands to execute'
+    required: true
 runs:
     using: 'docker'
     image: 'Dockerfile'
+    args: ${{ inputs.commands }}
