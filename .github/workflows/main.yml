@@ -1,0 +1,12 @@
+on: [push]
+
+jobs:
+  testactions_job:
+    runs-on: ubuntu-latest
+    name: A job to test the multi architecture actions
+    steps:
+    - name: Setup
+      uses: uraimo/multiarch-actions/setup-multiarch
+    - name: Run uname on arm64
+      uses: uraimo/multiarch-actions/run-on-arch
+      run: uname -a

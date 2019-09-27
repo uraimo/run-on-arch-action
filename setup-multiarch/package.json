@@ -1,0 +1,11 @@
+{
+  "name": "setup-multiarch",
+  "version": "1.0.0",
+  "description": "Setup multi architecture support for Github Actions",
+  "author": "Umberto Raimondi",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "@actions/core": "^1.0.0",
+    "@actions/exec": "^1.0.0"
+  }
+}

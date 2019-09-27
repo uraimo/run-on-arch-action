@@ -1,0 +1,17 @@
+name: 'Run on Arch'
+branding:
+  icon: 'cpu'
+  color: 'green'
+description: 'Run something in a container with a specific architecture'
+inputs:
+  architecture:
+    description: 'Architecture type'
+    required: true
+    default: 'arm64v8'
+  distribution:
+    description: 'OS distribution name'
+    required: true
+    default: 'ubuntu:18.04'
+runs:
+    using: 'docker'
+    image: 'Dockerfile'
