@@ -5,12 +5,12 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to test the multi architecture actions
     steps:
-    - name: Setup
+    - name: Setup MultiArch
       uses: uraimo/multiarch-actions/setup-multiarch@master
-    - name: Run uname on arm64
+    - name: Run some commands on arm64
       uses: uraimo/multiarch-actions/run-on-arch@master
       with:
-        command: >-
-            uname -a ;
-            free ;
+        commands: |
+            uname -a
+            free
             echo "Done."
