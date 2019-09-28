@@ -10,6 +10,8 @@ jobs:
     - name: Build with Swift on armv7
       uses: uraimo/multiarch-actions/run-on-arch@master
       with:
+        architecture: armv7
+        distribution: ubuntu18.04
         run: |
           wget https://github.com/uraimo/buildSwiftOnARM/releases/download/5.0.3/swift-5.0.3-armv7-Ubuntu1804.tgz
           tar xzf swift-5.0.3-armv7-Ubuntu1804.tgz

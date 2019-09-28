@@ -12,6 +12,8 @@ jobs:
       id: runcmd
       uses: uraimo/multiarch-actions/run-on-arch@master
       with:
+        architecture: arm64v8
+        distribution: ubuntu18.04
         run: |
           apt update
           apt install -y build-essential
