@@ -1,0 +1,5 @@
+FROM balenalib/rpi-raspbian:stretch
+
+COPY entrypoint.sh /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]

@@ -1,0 +1,5 @@
+FROM arm32v7/debian:buster
+
+COPY entrypoint.sh /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
