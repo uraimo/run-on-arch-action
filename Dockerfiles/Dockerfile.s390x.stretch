@@ -1,5 +1,1 @@
 FROM s390x/debian:stretch
-
-COPY entrypoint.sh /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]

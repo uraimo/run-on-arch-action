@@ -1,5 +1,1 @@
 FROM ppc64le/debian:stretch
-
-COPY entrypoint.sh /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
