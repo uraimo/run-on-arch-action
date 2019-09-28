@@ -13,9 +13,23 @@ jobs:
       uses: uraimo/multiarch-actions/run-on-arch@master
       with:
         run: |
-            uname -a
-            lscpu | grep "Model name:" | sed -r 's/Model name:\s{1,}//g'
-            free
-            echo ::set-output name=out::$(uname -a)
+          apt install gcc
+          uname -a > output.txt
+          echo | gcc -v -E - 2>&1 | grep cc1 >> output.txt
+          lscpu | grep "Model name:" | sed -r 's/Model name:\s{1,}//g' >> output.txt
+          cat /proc/meminfo | grep MemTotal | sed -r 's/MemTotal:\s{1,}//g' >> output.txt
+          echo ::set-output name=uname::$(uname -a)
+          echo ::set-output name=cctarget::$(echo | gcc -v -E - 2>&1 | grep cc1)
+          echo ::set-output name=cpuname::$(lscpu | grep "Model name:" | sed -r 's/Model name:\s{1,}//g')
+          echo ::set-output name=memtotal::$(cat /proc/meminfo | grep MemTotal | sed -r 's/MemTotal:\s{1,}//g')
     - name: Get the output
-      run: echo "The output was ${{ steps.runcmd.outputs.out }}"
+      run: |
+        echo "The uname output was ${{ steps.runcmd.outputs.uname }}"
+        echo "The gcc parameters were ${{ steps.runcmd.outputs.cctarget }}"
+        echo "The cpu name was ${{ steps.runcmd.outputs.cpuname }}"
+        echo "The total memory was ${{ steps.runcmd.outputs.memtotal }}"
+    - name: Upload artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: output
+        path: output.txt
