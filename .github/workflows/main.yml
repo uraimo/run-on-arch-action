@@ -13,7 +13,7 @@ jobs:
       uses: uraimo/multiarch-actions/run-on-arch@master
       with:
         run: |
-          apt install gcc
+          apt install build-essential
           uname -a > output.txt
           echo | gcc -v -E - 2>&1 | grep cc1 >> output.txt
           lscpu | grep "Model name:" | sed -r 's/Model name:\s{1,}//g' >> output.txt
