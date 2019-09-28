@@ -17,6 +17,6 @@ inputs:
     required: true
 runs:
     using: 'docker'
-    image: 'Dockerfile${{ inputs.architecture }}.${{ inputs.distribution }}'
+    image: '${{ inputs.architecture }}/${{ inputs.distribution }}/Dockerfile'
     args:
       - ${{ inputs.run }}
