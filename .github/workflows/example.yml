@@ -9,7 +9,7 @@ jobs:
       id: runcmd
       uses: uraimo/multiarch-actions@master
       with:
-        architecture: arm64v8
+        architecture: aarch64
         distribution: ubuntu18.04
         run: |
           apt update
