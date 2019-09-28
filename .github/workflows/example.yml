@@ -7,7 +7,7 @@ jobs:
     steps:
     - name: Run some commands on arm64
       id: runcmd
-      uses: uraimo/multiarch-actions/run-on-arch@master
+      uses: uraimo/multiarch-actions@master
       with:
         architecture: arm64v8
         distribution: ubuntu18.04
