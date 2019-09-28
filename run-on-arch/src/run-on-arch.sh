@@ -2,7 +2,7 @@
 
 ARCH=$1
 DISTRO=$2
-printf -v RUNS "%q" $3
+RUNS=$3
 
 sudo apt update -y && sudo apt install -y qemu qemu-user-static
 # Install support for new archs via qemu
