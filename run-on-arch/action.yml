@@ -5,11 +5,11 @@ branding:
 description: 'Run something in a container with a specific architecture'
 inputs:
   architecture:
-      description: 'Architecture type: armv6,armv7,aarch64,s390x,ppc64le'
+    description: 'Architecture type: armv6,armv7,aarch64,s390x,ppc64le'
     required: false
     default: 'arm64v8'
   distribution:
-      description: 'OS distribution name: ubuntu16.04, ubuntu18.04, buster, stretch, jessie'
+    description: 'OS distribution name: ubuntu16.04, ubuntu18.04, buster, stretch, jessie'
     required: false
     default: 'ubuntu:18.04'
   run:
