@@ -16,7 +16,5 @@ inputs:
     description: 'Command to execute'
     required: true
 runs:
-    using: 'docker'
-    image: run-on-arch/Dockerfiles/$INPUT_ARCHITECTURE/$INPUT_DISTRIBUTION/Dockerfile
-    args:
-      - ${{ inputs.run }}
+  using: 'node12'
+  main: 'src/run-on-arch.js'

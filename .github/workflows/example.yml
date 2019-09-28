@@ -5,9 +5,6 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to test the multi architecture actions
     steps:
-    - name: Setup MultiArch
-      id: setup-multi
-      uses: uraimo/multiarch-actions/setup-multiarch@master
     - name: Run some commands on arm64
       id: runcmd
       uses: uraimo/multiarch-actions/run-on-arch@master

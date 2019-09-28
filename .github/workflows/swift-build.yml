@@ -5,8 +5,6 @@ jobs:
     runs-on: ubuntu-18.04
     name: A job to test the multi architecture actions
     steps:
-    - name: Setup MultiArch
-      uses: uraimo/multiarch-actions/setup-multiarch@master
     - name: Build with Swift on armv7
       uses: uraimo/multiarch-actions/run-on-arch@master
       with:
