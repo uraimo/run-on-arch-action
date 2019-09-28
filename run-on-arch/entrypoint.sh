@@ -1,10 +1,7 @@
 #!/bin/bash
 
+# Break up the multi-line command list and evaluate it
 commands=$@
-echo "$commands"
 command_list="${commands//[$'\t\r\n']/;}" 
-echo "$command_list"
 eval $command_list
 
-output=$(uname -a)
-echo ::set-output name=out::$output

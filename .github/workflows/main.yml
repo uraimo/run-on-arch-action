@@ -14,7 +14,8 @@ jobs:
       with:
         run: |
             uname -a
+            lscpu | grep "Model name:" | sed -r 's/Model name:\s{1,}//g'
             free
-            echo "Done."
+            echo ::set-output name=out::$(uname -a)
     - name: Get the output
       run: echo "The output was ${{ steps.runcmd.outputs.out }}"
