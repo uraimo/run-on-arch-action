@@ -1,8 +1,0 @@
-name: 'Setup MultiArch'
-branding:
-  icon: 'cpu'
-  color: 'yellow'
-description: 'Setup Multi Architecture Support'
-runs:
-  using: 'node12'
-  main: 'src/setup-multiarch.js'
