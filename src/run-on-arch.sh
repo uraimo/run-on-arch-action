@@ -10,7 +10,7 @@ COMMANDS="${COMMANDS//[$'\t\r\n']/;}" #Replace newline with ;
 sudo apt update -y && sudo apt install -y qemu qemu-user-static
 
 # Symbolic link for the action repository location
-ln -s /home/runner/work/_actions/uraimo/multiarch-actions/master/ multi-act
+ln -s /home/runner/work/_actions/uraimo/run-on-arch-action/master/ multi-act
 
 docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 docker build . --file multi-act/Dockerfiles/Dockerfile.$ARCH.$DISTRO --tag multiarchimage 
