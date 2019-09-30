@@ -1,7 +1,7 @@
 {
-  "name": "setup-multiarch",
+  "name": "run-on-arch",
   "version": "1.0.0",
-  "description": "Setup multi architecture support for Github Actions",
+  "description": "Multi architecture support for Github Actions",
   "author": "Umberto Raimondi",
   "license": "BSD-3-Clause",
   "dependencies": {

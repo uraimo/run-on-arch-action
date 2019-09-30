@@ -6,7 +6,7 @@ jobs:
     name: A job to test the multi architecture actions
     steps:
     - name: Build with Swift on armv7
-      uses: uraimo/multiarch-actions@master
+      uses: uraimo/run-on-arch-action@master
       with:
         architecture: armv7
         distribution: ubuntu18.04

@@ -3,11 +3,11 @@ on: [push]
 jobs:
   testactions_job:
     runs-on: ubuntu-latest
-    name: A job to test the multi architecture actions
+    name: A job to test the multi architecture action
     steps:
     - name: Run some commands on arm64
       id: runcmd
-      uses: uraimo/multiarch-actions@master
+      uses: uraimo/run-on-arch-action@master
       with:
         architecture: aarch64
         distribution: ubuntu18.04

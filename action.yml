@@ -1,4 +1,4 @@
-name: 'Run on Arch'
+name: 'Run on Architecture'
 branding:
   icon: 'cpu'
   color: 'green'
@@ -13,7 +13,7 @@ inputs:
     required: false
     default: 'ubuntu:18.04'
   run:
-    description: 'Command to execute'
+    description: 'Command/s to execute'
     required: true
 runs:
   using: 'node12'

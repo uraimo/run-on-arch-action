@@ -12,7 +12,7 @@ async function main() {
     console.log('Configuring Docker for multi-architecture support')
     await exec(path.join(__dirname, 'run-on-arch.sh'),[arch,distro,runs])
   } else {
-    throw new Error('setup-multiarch supports only Linux')
+    throw new Error('run-on-arch supports only Linux')
   }
 }
 
