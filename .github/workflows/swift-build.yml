@@ -12,8 +12,7 @@ jobs:
         distribution: ubuntu18.04
         run: |
           apt update
-          apt install -y libbsd clang libicu-dev libcurl4-nss-dev curl
-          apt install -y curl
+          apt install -y libatomic1 libbsd0 clang libicu-dev libcurl4-nss-dev curl
           curl -OL https://github.com/uraimo/buildSwiftOnARM/releases/download/5.0.3/swift-5.0.3-armv7-Ubuntu1804.tgz
           tar xzf swift-5.0.3-armv7-Ubuntu1804.tgz
           echo "import Glibc\n\nprint(\"Test!\")" > test.swift
