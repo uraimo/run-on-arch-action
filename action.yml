@@ -2,7 +2,8 @@ name: 'Run on Architecture'
 branding:
   icon: 'cpu'
   color: 'green'
-description: 'Run something in a container with a specific architecture'
+description: 'Run commands in a Linux container with a specific architecture (armv6,armv7,aarch64,s390x,ppc64le)'
+author: 'Umberto Raimondi'
 inputs:
   architecture:
     description: 'Architecture type: armv6,armv7,aarch64,s390x,ppc64le'
