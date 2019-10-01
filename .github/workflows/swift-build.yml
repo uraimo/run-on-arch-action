@@ -16,5 +16,6 @@ jobs:
           apt install -y curl
           curl -OL https://github.com/uraimo/buildSwiftOnARM/releases/download/5.0.3/swift-5.0.3-armv7-Ubuntu1804.tgz
           tar xzf swift-5.0.3-armv7-Ubuntu1804.tgz
-          echo "import Glibc\n\nprint(\"Test!\")" > test.swift
-          ./usr/bin/swift run test.swift
+          echo "import Glibc;puts(\"Test!\");print(\"Test!!\")" > test.swift
+          ./usr/bin/swiftc test.swift
+          ./test
