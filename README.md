@@ -4,7 +4,7 @@
 
 [![](https://github.com/uraimo/run-on-arch-action/workflows/Test/badge.svg)](https://github.com/uraimo/run-on-arch/actions)
 
-A Github Action that executes commands on an alternative platform (ARMv6, ARMv7, aarch64, s390x, ppc64le).
+A Github Action that executes commands on an alternative architecture (ARMv6, ARMv7, aarch64, s390x, ppc64le).
 
 ## Usage
 
@@ -46,9 +46,9 @@ More complex examples that use different architectures and that show how output 
 
 ## Supported Platforms
 
-This table contains a list of possible Platform/Distribution combinations:
+This table contains a list of possible Architecture/Distribution combinations:
 
-| Platform | Distributions |
+| Architecture | Distributions |
 | -------- | ------------- |
 | armv6    | jessie, stretch, buster |
 | armv7    | jessie, stretch, buster, ubuntu16.04, ubuntu18.04 |
