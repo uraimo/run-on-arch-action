@@ -52,7 +52,7 @@ This table contains a list of possible Architecture/Distribution combinations:
 | -------- | ------------- |
 | armv6    | jessie, stretch, buster |
 | armv7    | jessie, stretch, buster, ubuntu16.04, ubuntu18.04 |
-| aarch64  | jessie, stretch, buster, ubuntu16.04, ubuntu18.04 |
+| aarch64  | stretch, buster, ubuntu16.04, ubuntu18.04 |
 | s390x  | jessie, stretch, buster, ubuntu16.04, ubuntu18.04 |
 | ppc64le  | jessie, stretch, buster, ubuntu16.04, ubuntu18.04 |
 
