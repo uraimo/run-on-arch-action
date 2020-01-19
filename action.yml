@@ -13,6 +13,9 @@ inputs:
     description: 'OS distribution name: ubuntu16.04, ubuntu18.04, buster, stretch, jessie'
     required: false
     default: 'ubuntu:18.04'
+  additionalArgs:
+    description: 'Additional arguments to add to docker run'
+    required: false
   run:
     description: 'Command/s to execute'
     required: true
