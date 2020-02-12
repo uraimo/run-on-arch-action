@@ -45,6 +45,19 @@ jobs:
 
 More complex examples that use different architectures and that show how output artifacts can be easily saved as you would normally do with actions running on x86 can be found in the [.github/workflows](https://github.com/uraimo/run-on-arch-action/tree/master/.github/workflows) directory.
 
+### Optional parameters
+
+Additional arguments can be passed to the docker that this action spawns:
+```
+...
+        with:
+          architecture: armv7
+          distribution: ubuntu18.04
+          additionalArgs: <additional args for architecture specific docker, optional>
+          run: |
+            uname -a
+```
+
 ## Supported Platforms
 
 This table contains a list of possible Architecture/Distribution combinations:
