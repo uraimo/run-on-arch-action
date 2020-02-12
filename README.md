@@ -34,7 +34,6 @@ jobs:
         with:
           architecture: armv7
           distribution: ubuntu18.04
-          additionalArgs: <additional args for architecture specific docker, optional>
           run: |
             uname -a
             echo ::set-output name=uname::$(uname -a)
