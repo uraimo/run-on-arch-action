@@ -29,7 +29,7 @@ jobs:
     name: Build on ARMv7 
     steps:
       - uses: actions/checkout@v1.0.0
-      - uses: uraimo/run-on-arch-action@v1.0.5
+      - uses: uraimo/run-on-arch-action@v1.0.8
         id: runcmd
         with:
           architecture: armv7
