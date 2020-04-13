@@ -1,0 +1,24 @@
+on: [push]
+
+jobs:
+  testactions_job:
+    runs-on: ubuntu-latest
+    name: A job to test the multi architecture action
+    steps:
+    - name: Run some commands on arm64
+      id: runcmd
+      uses: uraimo/run-on-arch-action@master
+      with:
+        architecture: aarch64
+        distribution: ubuntu18.04
+        run: |
+          apt update
+          apt install -y build-essential
+          uname -a > output.txt
+          echo | gcc -v -E - 2>&1 | grep cc1
+          lscpu | grep "Model name:" | sed -r 's/Model name:\s{1,}//g'
+          cat /proc/meminfo | grep MemTotal | sed -r 's/MemTotal:\s{1,}//g
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+          git clone https://github.com/Y2Z/monolith.git
+          cd monolith
+          make install
