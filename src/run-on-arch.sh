@@ -20,12 +20,12 @@ docker build . --file $ACT_PATH/Dockerfiles/Dockerfile.$ARCH.$DISTRO --tag multi
 docker run \
   --workdir /github/workspace \
   --rm \
-  -e HOME \
+  -e HOME=/github/home \
   -e GITHUB_REF \
   -e GITHUB_SHA \
   -e GITHUB_REPOSITORY \
   -e GITHUB_ACTOR \
-  -e GITHUB_WORKFLOW \
+  -e GITHUB_WORKFLOW=/github/workflow \
   -e GITHUB_HEAD_REF \
   -e GITHUB_BASE_REF \
   -e GITHUB_EVENT_NAME \
