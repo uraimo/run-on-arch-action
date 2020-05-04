@@ -29,7 +29,7 @@ docker run \
   -e GITHUB_HEAD_REF \
   -e GITHUB_BASE_REF \
   -e GITHUB_EVENT_NAME \
-  -e GITHUB_WORKSPACE \
+  -e GITHUB_WORKSPACE=/github/workspace \
   -e GITHUB_ACTION \
   -e GITHUB_EVENT_PATH \
   -e RUNNER_OS \
