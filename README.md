@@ -2,7 +2,7 @@
 
 
 
-[![](https://github.com/uraimo/run-on-arch-action/workflows/Test/badge.svg)](https://github.com/uraimo/run-on-arch/actions)
+[![](https://github.com/uraimo/run-on-arch-action/workflows/Test/badge.svg)](https://github.com/uraimo/run-on-arch-action)
 
 A Github Action that executes commands on an alternative architecture (ARMv6, ARMv7, aarch64, s390x, ppc64le).
 
@@ -28,8 +28,8 @@ jobs:
     runs-on: ubuntu-18.04
     name: Build on ARMv7 
     steps:
-      - uses: actions/checkout@v1.0.0
-      - uses: uraimo/run-on-arch-action@v1.0.8
+      - uses: actions/checkout@v2.1.0
+      - uses: uraimo/run-on-arch-action@v1.0.9
         id: runcmd
         with:
           architecture: armv7
