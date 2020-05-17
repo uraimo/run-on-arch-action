@@ -2,7 +2,7 @@
 
 
 
-[![](https://github.com/uraimo/run-on-arch-action/workflows/Test/badge.svg)](https://github.com/uraimo/run-on-arch/actions)
+[![](https://github.com/uraimo/run-on-arch-action/workflows/test/badge.svg)](https://github.com/uraimo/run-on-arch-action)
 
 A Github Action that executes commands on an alternative architecture (ARMv6, ARMv7, aarch64, s390x, ppc64le).
 
@@ -28,8 +28,8 @@ jobs:
     runs-on: ubuntu-18.04
     name: Build on ARMv7 
     steps:
-      - uses: actions/checkout@v1.0.0
-      - uses: uraimo/run-on-arch-action@v1.0.8
+      - uses: actions/checkout@v2.1.0
+      - uses: uraimo/run-on-arch-action@v1.0.9
         id: runcmd
         with:
           architecture: armv7
@@ -42,7 +42,7 @@ jobs:
             echo "The uname output was ${{ steps.runcmd.outputs.uname }}"
 ```
 
-More complex examples that use different architectures and that show how output artifacts can be easily saved as you would normally do with actions running on x86 can be found in the [.github/workflows](https://github.com/uraimo/run-on-arch-action/tree/master/.github/workflows) directory.
+More complex examples that use different architectures and that show for example how output artifacts can be easily saved if you want to download them, as you would normally do with actions running on x86, can be found in the [.github/workflows](https://github.com/uraimo/run-on-arch-action/tree/master/.github/workflows) directory.
 
 ### Optional parameters
 
