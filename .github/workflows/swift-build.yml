@@ -1,3 +1,4 @@
+name: swift-build
 on: [push,pull_request]
 
 jobs:
