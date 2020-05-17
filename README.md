@@ -2,7 +2,7 @@
 
 
 
-[![](https://github.com/uraimo/run-on-arch-action/workflows/Test/badge.svg)](https://github.com/uraimo/run-on-arch-action)
+[![](https://github.com/uraimo/run-on-arch-action/workflows/test/badge.svg)](https://github.com/uraimo/run-on-arch-action)
 
 A Github Action that executes commands on an alternative architecture (ARMv6, ARMv7, aarch64, s390x, ppc64le).
 
