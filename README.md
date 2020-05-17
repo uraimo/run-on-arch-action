@@ -42,7 +42,7 @@ jobs:
             echo "The uname output was ${{ steps.runcmd.outputs.uname }}"
 ```
 
-More complex examples that use different architectures and that show how output artifacts can be easily saved as you would normally do with actions running on x86 can be found in the [.github/workflows](https://github.com/uraimo/run-on-arch-action/tree/master/.github/workflows) directory.
+More complex examples that use different architectures and that show for example how output artifacts can be easily saved if you want to download them, as you would normally do with actions running on x86, can be found in the [.github/workflows](https://github.com/uraimo/run-on-arch-action/tree/master/.github/workflows) directory.
 
 ### Optional parameters
 
