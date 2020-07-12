@@ -6,15 +6,17 @@ jobs:
     runs-on: ubuntu-18.04
     name: A job to test the multi architecture actions
     steps:
+    - name: Checkout
+      uses: actions/checkout@v2
     - name: Build with Swift on armv7
-      uses: uraimo/run-on-arch-action@master
+      uses: ./
       with:
         architecture: armv7
         distribution: ubuntu18.04
         run: |
-          apt update
-          apt install -y libatomic1 libbsd0 clang libicu-dev libcurl4-nss-dev
-          apt install -y curl
+          export DEBIAN_FRONTEND=noninteractive
+          apt-get update -q
+          apt install -q -y libatomic1 libbsd0 clang libicu-dev libcurl4-nss-dev curl
           curl -OL https://github.com/uraimo/buildSwiftOnARM/releases/download/5.0.3/swift-5.0.3-armv7-Ubuntu1804.tgz
           tar xzf swift-5.0.3-armv7-Ubuntu1804.tgz
           echo "import Glibc;puts(\"Test!\");print(\"Test!!\")" > test.swift
