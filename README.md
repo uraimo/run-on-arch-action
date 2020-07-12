@@ -63,11 +63,11 @@ This table contains a list of possible Architecture/Distribution combinations:
 
 | Architecture | Distributions |
 | -------- | ------------- |
-| armv6    | jessie, stretch, buster |
-| armv7    | jessie, stretch, buster, ubuntu16.04, ubuntu20.04, ubuntu18.04 |
-| aarch64  | stretch, buster, ubuntu16.04, ubuntu18.04, ubuntu20.04, fedora_latest |
-| s390x  | jessie, stretch, buster, ubuntu16.04, ubuntu18.04, ubuntu20.04, fedora_latest |
-| ppc64le  | jessie, stretch, buster, ubuntu16.04, ubuntu18.04,ubuntu20.04, fedora_latest |
+| armv6    | jessie, stretch, buster, alpine_latest |
+| armv7    | jessie, stretch, buster, ubuntu16.04, ubuntu18.04, ubuntu20.04, alpine_latest |
+| aarch64  | stretch, buster, ubuntu16.04, ubuntu18.04, ubuntu20.04, fedora_latest, alpine_latest |
+| s390x  | jessie, stretch, buster, ubuntu16.04, ubuntu18.04, ubuntu20.04, fedora_latest, alpine_latest |
+| ppc64le  | jessie, stretch, buster, ubuntu16.04, ubuntu18.04,ubuntu20.04, fedora_latest, alpine_latest |
 
 Using an invalid combination will result in a crash but new configuration can be easily added if a working docker image is available.
 

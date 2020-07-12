@@ -1,0 +1,1 @@
+FROM ppc64le/alpine:latest
