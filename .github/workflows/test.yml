@@ -13,8 +13,9 @@ jobs:
         architecture: aarch64
         distribution: ubuntu18.04
         run: |
-          apt update
-          apt install -y build-essential
+          export DEBIAN_FRONTEND=noninteractive
+          apt-get update -q
+          apt-get install -q -y build-essential
           uname -a > output.txt
           echo | gcc -v -E - 2>&1 | grep cc1 >> output.txt
           lscpu | grep "Model name:" | sed -r 's/Model name:\s{1,}//g' >> output.txt
