@@ -6,9 +6,11 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to test the multi architecture action
     steps:
+    - name: Checkout
+      uses: actions/checkout@v2
     - name: Run some commands on arm64
       id: runcmd
-      uses: uraimo/run-on-arch-action@master
+      uses: ./
       with:
         architecture: aarch64
         distribution: ubuntu18.04
