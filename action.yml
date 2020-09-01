@@ -1,24 +1,41 @@
-name: 'Run on Architecture'
+name: 'Run on architecture'
 branding:
   icon: 'cpu'
   color: 'green'
-description: 'Run commands in a Linux container with a specific architecture (armv6,armv7,aarch64,s390x,ppc64le)'
-author: 'Umberto Raimondi'
+description: 'Run commands in a Linux container with a specific CPU architecture (armv6, armv7, aarch64, s390x, ppc64le)'
+author: 'Umberto Raimondi, Elijah Shaw-Rutschman'
 inputs:
-  architecture:
-    description: 'Architecture type: armv6,armv7,aarch64,s390x,ppc64le'
+  arch:
+    description: 'CPU architecture: armv6, armv7, aarch64, s390x, ppc64le.'
     required: false
-    default: 'arm64v8'
-  distribution:
-    description: 'OS distribution name: ubuntu16.04, ubuntu18.04, buster, stretch, jessie'
+    default: 'aarch64'
+  distro:
+    description: 'Linux distribution name: ubuntu16.04, ubuntu18.04, ubuntu20.04, buster, stretch, jessie, fedora_latest, alpine_latest.'
     required: false
-    default: 'ubuntu:18.04'
-  additionalArgs:
-    description: 'Additional arguments to add to docker run'
-    required: false
-  run:
-    description: 'Command/s to execute'
+    default: 'ubuntu18.04'
+  githubToken:
+    description: 'Your GitHub token, used for caching Docker images in your project''s public package registry. Usually this would just be $\{{ github.token }}. This speeds up builds and is highly recommended.'
     required: true
+    default: ''
+  env:
+    description: 'Environment variables to propagate to the container. YAML, but must begin with a | character. These variables will be available in both run and setup.'
+    required: false
+    default: ''
+  run:
+    description: 'Shell commands to execute in the container.'
+    required: true
+  shell:
+    description: 'The shell to run commands with in the container. Default: /bin/sh on alpine (because Alpine uses BusyBox), /bin/bash for other distros.'
+    required: false
+    default: ''
+  dockerRunArgs:
+    description: 'Additional arguments to pass to docker run, such as volume mappings. See README for example usage.'
+    required: false
+  setup:
+    description: 'Shell commands to execute on the host before running the container, such as creating directories for volume mappings. See README for example usage.'
+    required: false
+    default: ''
+
 runs:
   using: 'node12'
   main: 'src/run-on-arch.js'

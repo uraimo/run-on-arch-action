@@ -11,8 +11,9 @@ jobs:
     - name: Build with Swift on armv7
       uses: ./
       with:
-        architecture: armv7
-        distribution: ubuntu18.04
+        arch: armv7
+        distro: ubuntu18.04
+        githubToken: ${{ github.token }}
         run: |
           export DEBIAN_FRONTEND=noninteractive
           apt-get update -q

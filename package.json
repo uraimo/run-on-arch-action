@@ -1,11 +1,12 @@
 {
   "name": "run-on-arch",
-  "version": "1.0.0",
-  "description": "Multi architecture support for Github Actions",
-  "author": "Umberto Raimondi",
+  "version": "2.0.0",
+  "description": "Multi architecture support for GitHub Actions",
+  "author": "Umberto Raimondi, Elijah Shaw-Rutschman",
   "license": "BSD-3-Clause",
   "dependencies": {
     "@actions/core": "^1.1.1",
-    "@actions/exec": "^1.0.1"
+    "@actions/exec": "^1.0.1",
+    "yaml": "^1.10.0"
   }
 }
