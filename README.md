@@ -144,6 +144,7 @@ New distros and archs can be added simply by creating a Dockerfile named `Docker
 ## Authors
 
 [Umberto Raimondi](https://github.com/uraimo)
+
 [Elijah Shaw-Rutschman](https://github.com/elijahr)
 
 ## License
