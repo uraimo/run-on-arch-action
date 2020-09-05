@@ -125,7 +125,7 @@ jobs:
 
 This table details the valid `arch`/`distro` combinations:
 
-```
+
 | arch     | distro     |
 | -------- | ---------- |
 | armv6    | jessie, stretch, buster, alpine_latest |
@@ -133,7 +133,7 @@ This table details the valid `arch`/`distro` combinations:
 | aarch64  | stretch, buster, ubuntu16.04, ubuntu18.04, ubuntu20.04, fedora_latest, alpine_latest |
 | s390x    | jessie, stretch, buster, ubuntu16.04, ubuntu18.04, ubuntu20.04, fedora_latest, alpine_latest |
 | ppc64le  | jessie, stretch, buster, ubuntu16.04, ubuntu18.04,ubuntu20.04, fedora_latest, alpine_latest |
-```
+
 
 Using an invalid `arch`/`distro` combination will fail.
 
