@@ -141,6 +141,11 @@ Using an invalid `arch`/`distro` combination will fail.
 
 New distros and archs can be added simply by creating a Dockerfile named `Dockerfile.{arch}.{distro}` (that targets an image for the desired combination) in the [Dockerfiles](https://github.com/uraimo/run-on-arch-action/blob/master/Dockerfiles) directory. Pull requests welcome!
 
+## Authors
+
+[Umberto Raimondi](https://github.com/uraimo)
+[Elijah Shaw-Rutschman](https://github.com/elijahr)
+
 ## License
 
 This project is licensed under the [BSD 3-Clause License](https://github.com/uraimo/run-on-arch-action/blob/master/LICENSE).
