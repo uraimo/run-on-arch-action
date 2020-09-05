@@ -1,39 +1,199 @@
 name: test
-on: [push,pull_request]
+on: [push, pull_request]
 
 jobs:
   testactions_job:
     runs-on: ubuntu-latest
-    name: A job to test the multi architecture action
+    name: Test
+
+    strategy:
+      matrix:
+        include:
+          # The full matrix of Dockerfiles would be extensive, so just
+          # cover each arch and OS at least once.
+          - arch: aarch64
+            distro: fedora_latest
+          - arch: ppc64le
+            distro: alpine_latest
+          - arch: armv6
+            distro: buster
+          - arch: armv7
+            distro: jessie
+          - arch: s390x
+            distro: stretch
+          - arch: armv7
+            distro: ubuntu18.04
+            # Run tests that only need to be run on one matrix node
+            run_extra_tests: true
+
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Run some commands on arm64
-      id: runcmd
+
+    - name: Build and run container
+      id: build
       uses: ./
       with:
-        architecture: aarch64
-        distribution: ubuntu18.04
+        githubToken: ${{ github.token }}
+        arch: ${{ matrix.arch }}
+        distro: ${{ matrix.distro }}
+        env: |
+          var_1: value_1
+          var_2: value_2
+
+        dockerRunArgs: |
+          -v "${PWD}/volume_1:/volume_1"
+          -v "${PWD}/volume_2:/volume_2"
+
+        # Sourced on host, after container build, before container run
+        setup: |
+          distro_info=$(cat /etc/*-release | tr '[:upper:]' '[:lower:]' | tr '"' ' ' | tr '\n' ' ')
+
+          echo ::set-output name=host_arch::$(uname -m)
+          echo ::set-output name=host_distro_info::$distro_info
+          echo ::set-output name=host_var_1::$var_1
+          echo ::set-output name=host_var_2::$var_2
+          echo ::set-output name=host_shell_options::$-
+
+          # Setup volumes
+          mkdir "${PWD}/volume_1"
+          touch "${PWD}/volume_1/file_1"
+          mkdir "${PWD}/volume_2"
+          touch "${PWD}/volume_2/file_2"
+
+        # Run on container
         run: |
-          export DEBIAN_FRONTEND=noninteractive
-          apt-get update -q
-          apt-get install -q -y build-essential
-          uname -a > output.txt
-          echo | gcc -v -E - 2>&1 | grep cc1 >> output.txt
-          lscpu | grep "Model name:" | sed -r 's/Model name:\s{1,}//g' >> output.txt
-          cat /proc/meminfo | grep MemTotal | sed -r 's/MemTotal:\s{1,}//g' >> output.txt
-          echo ::set-output name=uname::$(uname -a)
-          echo ::set-output name=cctarget::$(echo | gcc -v -E - 2>&1 | grep cc1)
-          echo ::set-output name=cpuname::$(lscpu | grep "Model name:" | sed -r 's/Model name:\s{1,}//g')
-          echo ::set-output name=memtotal::$(cat /proc/meminfo | grep MemTotal | sed -r 's/MemTotal:\s{1,}//g')
-    - name: Get the output
+          distro_info=$(cat /etc/*-release | tr '[:upper:]' '[:lower:]' | sed 's/"//g' | tr '\n' ';')
+
+          echo ::set-output name=arch::$(uname -m)
+          echo ::set-output name=distro_info::$distro_info
+          echo ::set-output name=shebang::$(head -n 1 "$0")
+          echo ::set-output name=var_1::$var_1
+          echo ::set-output name=var_2::$var_2
+          echo ::set-output name=volume_1_ls::$(ls /volume_1 || true)
+          echo ::set-output name=volume_2_ls::$(ls /volume_2 || true)
+          echo ::set-output name=shell_options::$-
+
+    - name: Assert setup script runs on host (check arch info)
       run: |
-        echo "The uname output was ${{ steps.runcmd.outputs.uname }}"
-        echo "The gcc parameters were ${{ steps.runcmd.outputs.cctarget }}"
-        echo "The cpu name was ${{ steps.runcmd.outputs.cpuname }}"
-        echo "The total memory was ${{ steps.runcmd.outputs.memtotal }}"
-    - name: Upload artifact
-      uses: actions/upload-artifact@master
+        arch="${{ steps.build.outputs.host_arch }}"
+
+        echo "Assert host_arch: '$arch' == 'x86_64'"
+        test "$arch" == "x86_64"
+
+    - name: Assert setup script runs on host (check distro info)
+      run: |
+        distro_info="${{ steps.build.outputs.host_distro_info }}"
+
+        echo "Assert distro: 'ubuntu' in '$distro_info'"
+        [[ "$distro_info" == *"$distro_key"* ]] || exit 1
+
+    - name: Assert setup script receives environment variables
+      run: |
+        var_1="${{ steps.build.outputs.host_var_1 }}"
+        var_2="${{ steps.build.outputs.host_var_2 }}"
+
+        echo "Assert var_1: '$var_1' == 'value_1'"
+        test "$var_1" == "value_1"
+
+        echo "Assert var_2: '$var_2' == 'value_2'"
+        test "$var_1" == "value_1"
+
+    - name: Assert job would fail on setup script error
+      run: |
+        # The `setup:` script should have `set -eu`, otherwise failures
+        # in the script won't propagate as job failures.
+        shell_options="${{ steps.build.outputs.host_shell_options }}"
+
+        echo "Assert bash options: 'e' and 'u' in '$shell_options'"
+        [[ "$shell_options" == *e* && "$shell_options" == *u* ]] || exit 1
+
+    - name: Assert container runs on arch
+      run: |
+        arch="${{ steps.build.outputs.arch }}"
+
+        case "${{ matrix.arch }}" in
+          armv6) expected_arch="armv6l" ;;
+          armv7) expected_arch="armv7l" ;;
+          *) expected_arch="${{ matrix.arch }}" ;;
+        esac
+
+        echo "Assert arch: '$arch' == '$expected_arch'"
+        test "$arch" == "$expected_arch"
+
+    - name: Assert container uses distro
+      run: |
+        distro_info="${{ steps.build.outputs.distro_info }}"
+
+        case "${{ matrix.distro }}" in
+          alpine*) distro_key="alpine" ;;
+          ubuntu*) distro_key="ubuntu" ;;
+          fedora*) distro_key="fedora" ;;
+          *) distro_key="${{ matrix.distro }}" ;;
+        esac
+
+        echo "Assert distro: '$distro_key' in '$distro_info'"
+        [[ "$distro_info" == *"$distro_key"* ]] || exit 1
+
+    - name: Assert container receives environment variables
+      run: |
+        var_1="${{ steps.build.outputs.var_1 }}"
+        var_2="${{ steps.build.outputs.var_2 }}"
+
+        echo "Assert var_1: '$var_1' == 'value_1'"
+        test "$var_1" == "value_1"
+
+        echo "Assert var_2: '$var_2' == 'value_2'"
+        test "$var_1" == "value_1"
+
+    - name: Assert job would fail on run script error
+      run: |
+        # The `run:` script should have `set -ue`, otherwise failures
+        # in the script won't propagate as job failures.
+        shell_options="${{ steps.build.outputs.shell_options }}"
+
+        echo "Assert bash options: 'e' and 'u' in '$shell_options'"
+        [[ "$shell_options" == *e* && "$shell_options" == *u* ]] || exit 1
+
+    - name: Assert dockerRunArgs are used
+      run: |
+        volume_1_ls="${{ steps.build.outputs.volume_1_ls }}"
+        volume_2_ls="${{ steps.build.outputs.volume_2_ls }}"
+
+        echo "Assert volume_1_ls: '$volume_1_ls' == 'file_1'"
+        test "$volume_1_ls" == "file_1"
+
+        echo "Assert volume_2_ls: '$volume_2_ls' == 'file_2'"
+        test "$volume_2_ls" == "file_2"
+
+    - name: Assert container determines correct default shell for distro
+      run: |
+        shebang="${{ steps.build.outputs.shebang }}"
+
+        case "${{ matrix.distro }}" in
+          alpine*) expected_shebang="#!/bin/sh" ;;
+          *) expected_shebang="#!/bin/bash" ;;
+        esac
+
+        echo "Assert shebang: '$shebang' == '$expected_shebang'"
+        test "$shebang" == "$expected_shebang"
+
+    - name: Build and run other container (custom shell, no githubToken)
+      if: ${{ matrix.run_extra_tests }}
+      id: build_custom_shell
+      uses: ./
       with:
-        name: output
-        path: output.txt
+        arch: ${{ matrix.arch }}
+        distro: ${{ matrix.distro }}
+        shell: /bin/dash
+        run: |
+          # Run on container
+          echo ::set-output name=shebang::$(head -n 1 "$0")
+
+    - name: Assert container uses custom shell
+      if: ${{ matrix.run_extra_tests }}
+      run: |
+        shebang="${{ steps.build_custom_shell.outputs.shebang }}"
+
+        echo "Assert shebang: '$shebang' == '#!/bin/dash'"
+        test "$shebang" == "#!/bin/dash"
