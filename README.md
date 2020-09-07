@@ -27,7 +27,7 @@ The action also accepts some optional input parameters:
 A basic example that sets an output variable for use in subsequent steps:
 
 ```yaml
-on: [push]
+on: [push, pull_request]
 
 jobs:
   armv7_job:
@@ -36,7 +36,7 @@ jobs:
     name: Build on ubuntu-18.04 armv7
     steps:
       - uses: actions/checkout@v2.1.0
-      - uses: uraimo/run-on-arch-action@v2.0.1
+      - uses: uraimo/run-on-arch-action@v2.0.2
         name: Run commands
         id: runcmd
         with:
@@ -63,7 +63,7 @@ jobs:
 This shows how to use a matrix to produce platform-specific artifacts, and includes example values for the optional input parameters `setup`, `shell`, `env`, and `dockerRunArgs`.
 
 ```yaml
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build_job:
@@ -84,7 +84,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2.1.0
-      - uses: uraimo/run-on-arch-action@v2.0.1
+      - uses: uraimo/run-on-arch-action@v2.0.2
         name: Build artifact
         id: build
         with:

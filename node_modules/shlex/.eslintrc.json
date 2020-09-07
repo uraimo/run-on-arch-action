@@ -1,0 +1,7 @@
+{
+    "extends": "standard",
+    "rules": {
+      "camelcase": "off",
+      "no-multiple-empty-lines": "off"
+    }
+}

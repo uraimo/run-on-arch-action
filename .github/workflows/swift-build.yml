@@ -1,5 +1,5 @@
-name: swift-build
-on: [push,pull_request]
+name: Build with Swift on armv7
+on: [push, pull_request]
 
 jobs:
   testactions_job:
@@ -8,7 +8,7 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Build with Swift on armv7
+    - name: Build
       uses: ./
       with:
         arch: armv7

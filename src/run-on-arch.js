@@ -2,10 +2,11 @@ const core = require('@actions/core')
 const fs = require('fs');
 const path = require('path')
 const YAML = require('yaml');
+const shlex = require('shlex');
 const { exec } = require('@actions/exec')
 
 function slug(str) {
-  return str.replace(/[^a-zA-Z0-9]/g, '-');
+  return str.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
 }
 
 async function main() {
@@ -48,9 +49,8 @@ async function main() {
     commands,
   );
 
-  // Sanitize dockerRunArgs: replace escaped and unescaped newlines with a space
-  let dockerRunArgs = (core.getInput('dockerRunArgs') || '')
-    .replace(/\\?[\r\n]+/g, ' ');
+  // Parse dockerRunArgs into an array with shlex
+  const dockerRunArgs = shlex.split(core.getInput('dockerRunArgs') || '');
 
   const githubToken = core.getInput('githubToken') || '';
 
@@ -76,7 +76,7 @@ async function main() {
         throw new Error(`run-on-arch: env ${key} value must be flat.`);
       }
       env[key] = value;
-      dockerRunArgs += ` -e ${key} `;
+      dockerRunArgs.push(`-e${key}`);
     });
   }
 
@@ -86,7 +86,7 @@ async function main() {
   console.log('Configuring Docker for multi-architecture support')
   await exec(
     path.join(__dirname, 'run-on-arch.sh'),
-    [ dockerFile, dockerRunArgs, containerName, shell],
+    [ dockerFile, containerName, ...dockerRunArgs ],
     { env },
   );
 }

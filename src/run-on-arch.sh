@@ -4,12 +4,12 @@ set -euo pipefail
 
 # Args
 DOCKERFILE=$1
-DOCKER_RUN_ARGS=$2
-CONTAINER_NAME=$3
+CONTAINER_NAME=$2
+# Remainder of args get passed to docker
+declare -a DOCKER_RUN_ARGS=${@:3:${#@}}
 
 # Defaults
 ACTION_DIR="$(cd "$(dirname "$0")"/.. >/dev/null 2>&1 ; pwd -P)"
-GITHUB_TOKEN=${GITHUB_TOKEN:-}
 PACKAGE_REGISTRY="docker.pkg.github.com/${GITHUB_REPOSITORY}/${CONTAINER_NAME}"
 DEBIAN_FRONTEND=noninteractive
 
@@ -44,7 +44,7 @@ build_container () {
 
   # If the GITHUB_TOKEN env var has a value, the container images will be
   # cached between builds.
-  if [[ -z "$GITHUB_TOKEN" ]]
+  if [[ -z "${GITHUB_TOKEN:-}" ]]
   then
     docker build . --file "$DOCKERFILE" --tag "${CONTAINER_NAME}:latest"
   else
@@ -61,6 +61,7 @@ build_container () {
     echo "$GITHUB_TOKEN" | docker login docker.pkg.github.com \
       -u "$GITHUB_ACTOR" \
       --password-stdin
+    set -x
     set "$BASH_FLAGS"
 
     docker pull "$PACKAGE_REGISTRY:latest" || true
@@ -78,8 +79,11 @@ run_container () {
   # Run user-provided setup script, in same shell
   source "${ACTION_DIR}/src/run-on-arch-setup.sh"
 
-   # Interpolate DOCKER_RUN_ARGS, to support evaluation of $VAR references
-  DOCKER_RUN_ARGS=$(eval echo "$DOCKER_RUN_ARGS")
+  # Interpolate DOCKER_RUN_ARGS, to support evaluation of $VAR references
+  for i in "${!DOCKER_RUN_ARGS[@]}"
+  do
+    DOCKER_RUN_ARGS[$i]=$(eval echo "${DOCKER_RUN_ARGS[$i]}")
+  done
 
   chmod +x "${ACTION_DIR}/src/run-on-arch-commands.sh"
 
@@ -123,7 +127,7 @@ run_container () {
     -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" \
     -v "${ACTION_DIR}:${ACTION_DIR}" \
     --tty \
-    $DOCKER_RUN_ARGS \
+    ${DOCKER_RUN_ARGS[@]} \
     "${CONTAINER_NAME}:latest" \
     "${ACTION_DIR}/src/run-on-arch-commands.sh"
 }

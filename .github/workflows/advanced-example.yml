@@ -1,4 +1,5 @@
-on: [push]
+name: Advanced Example
+on: [push, pull_request]
 
 jobs:
   build_job:
