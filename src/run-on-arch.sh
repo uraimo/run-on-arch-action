@@ -61,7 +61,6 @@ build_container () {
     echo "$GITHUB_TOKEN" | docker login docker.pkg.github.com \
       -u "$GITHUB_ACTOR" \
       --password-stdin
-    set -x
     set "$BASH_FLAGS"
 
     docker pull "$PACKAGE_REGISTRY:latest" || true
