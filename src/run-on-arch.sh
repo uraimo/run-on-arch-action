@@ -46,7 +46,10 @@ build_container () {
   # cached between builds.
   if [[ -z "${GITHUB_TOKEN:-}" ]]
   then
-    docker build . --file "$DOCKERFILE" --tag "${CONTAINER_NAME}:latest"
+    docker build \
+      "${ACTION_DIR}/Dockerfiles" \
+      --file "$DOCKERFILE" \
+      --tag "${CONTAINER_NAME}:latest"
   else
     # Build optimization that uses GitHub package registry to cache docker
     # images, based on Thai Pangsakulyanont's experiments.
@@ -64,7 +67,9 @@ build_container () {
     set "$BASH_FLAGS"
 
     docker pull "$PACKAGE_REGISTRY:latest" || true
-    docker build . --file "$DOCKERFILE" \
+    docker build \
+      "${ACTION_DIR}/Dockerfiles" \
+      --file "$DOCKERFILE" \
       --tag "${CONTAINER_NAME}:latest" \
       --cache-from="$PACKAGE_REGISTRY"
     docker tag "${CONTAINER_NAME}:latest" "$PACKAGE_REGISTRY" \

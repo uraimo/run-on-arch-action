@@ -70,6 +70,24 @@ jobs:
           mkdir "${PWD}/volume_5"
           touch "${PWD}/volume_5/file_5"
 
+        # Install some dependencies in the container, to be cached in a docker
+        # image layer.
+        install: |
+          case "${{ matrix.distro }}" in
+            ubuntu*|jessie|stretch|buster)
+              apt-get update -q -y
+              apt-get install -q -y git
+              ;;
+            fedora*)
+              dnf -y update
+              dnf -y install git which
+              ;;
+            alpine*)
+              apk update
+              apk add git
+              ;;
+          esac
+
         # Run on container
         run: |
           distro_info=$(cat /etc/*-release | tr '[:upper:]' '[:lower:]' | sed 's/"//g' | tr '\n' ';')
@@ -84,6 +102,7 @@ jobs:
           echo ::set-output name=volume_3_ls::"$(ls /volume_3 || true)"
           echo ::set-output name=volume_4_ls::"$(ls /volume_4 || true)"
           echo ::set-output name=volume_5_ls::"$(ls /volume_5 || true)"
+          echo ::set-output name=git_path::"$(which git)"
           echo ::set-output name=shell_options::"$-"
 
     - name: Assert setup script runs on host (check arch info)
@@ -110,6 +129,13 @@ jobs:
 
         echo "Assert env_distro: '$distro' == '${{ matrix.distro }}'"
         test "$distro" == "${{ matrix.distro }}"
+
+    - name: Assert install script runs
+      run: |
+        git_path="${{ steps.build.outputs.git_path }}"
+
+        echo "Assert git path: '$git_path' == '/usr/bin/git'"
+        test "$git_path" == "/usr/bin/git"
 
     - name: Assert job would fail on setup script error
       run: |

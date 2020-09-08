@@ -25,14 +25,14 @@ async function main() {
   }
 
   // Write setup commands to a script file for sourcing
-  let setup = core.getInput('setup') || '';
+  let setup = core.getInput('setup');
   fs.writeFileSync(
     path.join(__dirname, 'run-on-arch-setup.sh'),
     setup,
   );
 
   // If no shell provided, default to sh for alpine, bash for others
-  let shell = core.getInput('shell') || '';
+  let shell = core.getInput('shell');
   if (!shell) {
     if (/alpine/.test(distro)) {
       shell = '/bin/sh';
@@ -41,18 +41,30 @@ async function main() {
     }
   }
 
+  // Write install commands to a script file for running in the Dockerfile
+  const install = [
+    `#!${shell}`, 'set -eu;', 'export DEBIAN_FRONTEND=noninteractive;',
+    core.getInput('install'),
+  ].join('\n');
+  fs.writeFileSync(
+    // Must be in same directory as Dockerfiles
+    path.join(__dirname, '..', 'Dockerfiles', 'run-on-arch-install.sh'),
+    install,
+  );
+
   // Write container commands to a script file for running
-  let commands = core.getInput('run', { required: true });
-  commands = `#!${shell}\nset -eu\n${commands}`;
+  const commands = [
+    `#!${shell}`, 'set -eu;', core.getInput('run', { required: true }),
+  ].join('\n');
   fs.writeFileSync(
     path.join(__dirname, 'run-on-arch-commands.sh'),
     commands,
   );
 
   // Parse dockerRunArgs into an array with shlex
-  const dockerRunArgs = shlex.split(core.getInput('dockerRunArgs') || '');
+  const dockerRunArgs = shlex.split(core.getInput('dockerRunArgs'));
 
-  const githubToken = core.getInput('githubToken') || '';
+  const githubToken = core.getInput('githubToken');
 
   // Copy environment variables from parent process
   const env = { ...process.env };
