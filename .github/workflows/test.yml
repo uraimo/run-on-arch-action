@@ -1,4 +1,4 @@
-name: test
+name: Unit Tests
 on: [push, pull_request]
 
 jobs:
@@ -38,41 +38,72 @@ jobs:
         arch: ${{ matrix.arch }}
         distro: ${{ matrix.distro }}
         env: |
-          var_1: value_1
-          var_2: value_2
+          env_arch: ${{ matrix.arch }}
+          env_distro: ${{ matrix.distro }}
 
+        # Test multiple argument formats
         dockerRunArgs: |
           -v "${PWD}/volume_1:/volume_1"
-          -v "${PWD}/volume_2:/volume_2"
+          --volume=${PWD}/volume_2:/volume_2
+          "-v${PWD}/volume_3:/volume_3"
+          -v "${PWD}/volume_4:/volume_4" -v "${PWD}/volume_5:/volume_5"
 
         # Sourced on host, after container build, before container run
         setup: |
           distro_info=$(cat /etc/*-release | tr '[:upper:]' '[:lower:]' | tr '"' ' ' | tr '\n' ' ')
 
-          echo ::set-output name=host_arch::$(uname -m)
-          echo ::set-output name=host_distro_info::$distro_info
-          echo ::set-output name=host_var_1::$var_1
-          echo ::set-output name=host_var_2::$var_2
-          echo ::set-output name=host_shell_options::$-
+          echo ::set-output name=host_arch::"$(uname -m)"
+          echo ::set-output name=host_distro_info::"$distro_info"
+          echo ::set-output name=host_env_arch::"$env_arch"
+          echo ::set-output name=host_env_distro::"$env_distro"
+          echo ::set-output name=host_shell_options::"$-"
 
           # Setup volumes
           mkdir "${PWD}/volume_1"
           touch "${PWD}/volume_1/file_1"
           mkdir "${PWD}/volume_2"
           touch "${PWD}/volume_2/file_2"
+          mkdir "${PWD}/volume_3"
+          touch "${PWD}/volume_3/file_3"
+          mkdir "${PWD}/volume_4"
+          touch "${PWD}/volume_4/file_4"
+          mkdir "${PWD}/volume_5"
+          touch "${PWD}/volume_5/file_5"
+
+        # Install some dependencies in the container, to be cached in a docker
+        # image layer.
+        install: |
+          case "${{ matrix.distro }}" in
+            ubuntu*|jessie|stretch|buster)
+              apt-get update -q -y
+              apt-get install -q -y git
+              ;;
+            fedora*)
+              dnf -y update
+              dnf -y install git which
+              ;;
+            alpine*)
+              apk update
+              apk add git
+              ;;
+          esac
 
         # Run on container
         run: |
           distro_info=$(cat /etc/*-release | tr '[:upper:]' '[:lower:]' | sed 's/"//g' | tr '\n' ';')
 
-          echo ::set-output name=arch::$(uname -m)
-          echo ::set-output name=distro_info::$distro_info
-          echo ::set-output name=shebang::$(head -n 1 "$0")
-          echo ::set-output name=var_1::$var_1
-          echo ::set-output name=var_2::$var_2
-          echo ::set-output name=volume_1_ls::$(ls /volume_1 || true)
-          echo ::set-output name=volume_2_ls::$(ls /volume_2 || true)
-          echo ::set-output name=shell_options::$-
+          echo ::set-output name=arch::"$(uname -m)"
+          echo ::set-output name=distro_info::"$distro_info"
+          echo ::set-output name=shebang::"$(head -n 1 "$0")"
+          echo ::set-output name=env_arch::"$env_arch"
+          echo ::set-output name=env_distro::"$env_distro"
+          echo ::set-output name=volume_1_ls::"$(ls /volume_1 || true)"
+          echo ::set-output name=volume_2_ls::"$(ls /volume_2 || true)"
+          echo ::set-output name=volume_3_ls::"$(ls /volume_3 || true)"
+          echo ::set-output name=volume_4_ls::"$(ls /volume_4 || true)"
+          echo ::set-output name=volume_5_ls::"$(ls /volume_5 || true)"
+          echo ::set-output name=git_path::"$(which git)"
+          echo ::set-output name=shell_options::"$-"
 
     - name: Assert setup script runs on host (check arch info)
       run: |
@@ -90,14 +121,21 @@ jobs:
 
     - name: Assert setup script receives environment variables
       run: |
-        var_1="${{ steps.build.outputs.host_var_1 }}"
-        var_2="${{ steps.build.outputs.host_var_2 }}"
+        arch="${{ steps.build.outputs.host_env_arch }}"
+        distro="${{ steps.build.outputs.host_env_distro }}"
 
-        echo "Assert var_1: '$var_1' == 'value_1'"
-        test "$var_1" == "value_1"
+        echo "Assert env_arch: '$arch' == '${{ matrix.arch }}'"
+        test "$arch" == "${{ matrix.arch }}"
 
-        echo "Assert var_2: '$var_2' == 'value_2'"
-        test "$var_1" == "value_1"
+        echo "Assert env_distro: '$distro' == '${{ matrix.distro }}'"
+        test "$distro" == "${{ matrix.distro }}"
+
+    - name: Assert install script runs
+      run: |
+        git_path="${{ steps.build.outputs.git_path }}"
+
+        echo "Assert git path: '$git_path' == '/usr/bin/git'"
+        test "$git_path" == "/usr/bin/git"
 
     - name: Assert job would fail on setup script error
       run: |
@@ -137,14 +175,14 @@ jobs:
 
     - name: Assert container receives environment variables
       run: |
-        var_1="${{ steps.build.outputs.var_1 }}"
-        var_2="${{ steps.build.outputs.var_2 }}"
+        arch="${{ steps.build.outputs.env_arch }}"
+        distro="${{ steps.build.outputs.env_distro }}"
 
-        echo "Assert var_1: '$var_1' == 'value_1'"
-        test "$var_1" == "value_1"
+        echo "Assert env_arch: '$arch' == '${{ matrix.arch }}'"
+        test "$arch" == "${{ matrix.arch }}"
 
-        echo "Assert var_2: '$var_2' == 'value_2'"
-        test "$var_1" == "value_1"
+        echo "Assert env_distro: '$distro' == '${{ matrix.distro }}'"
+        test "$distro" == "${{ matrix.distro }}"
 
     - name: Assert job would fail on run script error
       run: |
@@ -159,12 +197,24 @@ jobs:
       run: |
         volume_1_ls="${{ steps.build.outputs.volume_1_ls }}"
         volume_2_ls="${{ steps.build.outputs.volume_2_ls }}"
+        volume_3_ls="${{ steps.build.outputs.volume_3_ls }}"
+        volume_4_ls="${{ steps.build.outputs.volume_4_ls }}"
+        volume_5_ls="${{ steps.build.outputs.volume_5_ls }}"
 
         echo "Assert volume_1_ls: '$volume_1_ls' == 'file_1'"
         test "$volume_1_ls" == "file_1"
 
         echo "Assert volume_2_ls: '$volume_2_ls' == 'file_2'"
         test "$volume_2_ls" == "file_2"
+
+        echo "Assert volume_3_ls: '$volume_3_ls' == 'file_3'"
+        test "$volume_3_ls" == "file_3"
+
+        echo "Assert volume_4_ls: '$volume_4_ls' == 'file_4'"
+        test "$volume_4_ls" == "file_4"
+
+        echo "Assert volume_5_ls: '$volume_5_ls' == 'file_5'"
+        test "$volume_5_ls" == "file_5"
 
     - name: Assert container determines correct default shell for distro
       run: |

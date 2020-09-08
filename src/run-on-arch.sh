@@ -4,12 +4,12 @@ set -euo pipefail
 
 # Args
 DOCKERFILE=$1
-DOCKER_RUN_ARGS=$2
-CONTAINER_NAME=$3
+CONTAINER_NAME=$2
+# Remainder of args get passed to docker
+declare -a DOCKER_RUN_ARGS=${@:3:${#@}}
 
 # Defaults
 ACTION_DIR="$(cd "$(dirname "$0")"/.. >/dev/null 2>&1 ; pwd -P)"
-GITHUB_TOKEN=${GITHUB_TOKEN:-}
 PACKAGE_REGISTRY="docker.pkg.github.com/${GITHUB_REPOSITORY}/${CONTAINER_NAME}"
 DEBIAN_FRONTEND=noninteractive
 
@@ -34,7 +34,7 @@ install_deps () {
   # Install support for non-amd64 emulation in Docker via QEMU.
   # Platforms: linux/arm64, linux/riscv64, linux/ppc64le, linux/s390x,
   #            linux/386, linux/arm/v7, linux/arm/v6
-  sudo apt-get update -y
+  sudo apt-get update -q -y
   sudo apt-get -qq install -y qemu qemu-user-static
   docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 }
@@ -44,9 +44,12 @@ build_container () {
 
   # If the GITHUB_TOKEN env var has a value, the container images will be
   # cached between builds.
-  if [[ -z "$GITHUB_TOKEN" ]]
+  if [[ -z "${GITHUB_TOKEN:-}" ]]
   then
-    docker build . --file "$DOCKERFILE" --tag "${CONTAINER_NAME}:latest"
+    docker build \
+      "${ACTION_DIR}/Dockerfiles" \
+      --file "$DOCKERFILE" \
+      --tag "${CONTAINER_NAME}:latest"
   else
     # Build optimization that uses GitHub package registry to cache docker
     # images, based on Thai Pangsakulyanont's experiments.
@@ -64,7 +67,9 @@ build_container () {
     set "$BASH_FLAGS"
 
     docker pull "$PACKAGE_REGISTRY:latest" || true
-    docker build . --file "$DOCKERFILE" \
+    docker build \
+      "${ACTION_DIR}/Dockerfiles" \
+      --file "$DOCKERFILE" \
       --tag "${CONTAINER_NAME}:latest" \
       --cache-from="$PACKAGE_REGISTRY"
     docker tag "${CONTAINER_NAME}:latest" "$PACKAGE_REGISTRY" \
@@ -78,8 +83,11 @@ run_container () {
   # Run user-provided setup script, in same shell
   source "${ACTION_DIR}/src/run-on-arch-setup.sh"
 
-   # Interpolate DOCKER_RUN_ARGS, to support evaluation of $VAR references
-  DOCKER_RUN_ARGS=$(eval echo "$DOCKER_RUN_ARGS")
+  # Interpolate DOCKER_RUN_ARGS, to support evaluation of $VAR references
+  for i in "${!DOCKER_RUN_ARGS[@]}"
+  do
+    DOCKER_RUN_ARGS[$i]=$(eval echo "${DOCKER_RUN_ARGS[$i]}")
+  done
 
   chmod +x "${ACTION_DIR}/src/run-on-arch-commands.sh"
 
@@ -123,7 +131,7 @@ run_container () {
     -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" \
     -v "${ACTION_DIR}:${ACTION_DIR}" \
     --tty \
-    $DOCKER_RUN_ARGS \
+    ${DOCKER_RUN_ARGS[@]} \
     "${CONTAINER_NAME}:latest" \
     "${ACTION_DIR}/src/run-on-arch-commands.sh"
 }

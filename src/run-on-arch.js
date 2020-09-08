@@ -2,10 +2,11 @@ const core = require('@actions/core')
 const fs = require('fs');
 const path = require('path')
 const YAML = require('yaml');
+const shlex = require('shlex');
 const { exec } = require('@actions/exec')
 
 function slug(str) {
-  return str.replace(/[^a-zA-Z0-9]/g, '-');
+  return str.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
 }
 
 async function main() {
@@ -24,14 +25,14 @@ async function main() {
   }
 
   // Write setup commands to a script file for sourcing
-  let setup = core.getInput('setup') || '';
+  let setup = core.getInput('setup');
   fs.writeFileSync(
     path.join(__dirname, 'run-on-arch-setup.sh'),
     setup,
   );
 
   // If no shell provided, default to sh for alpine, bash for others
-  let shell = core.getInput('shell') || '';
+  let shell = core.getInput('shell');
   if (!shell) {
     if (/alpine/.test(distro)) {
       shell = '/bin/sh';
@@ -40,19 +41,30 @@ async function main() {
     }
   }
 
+  // Write install commands to a script file for running in the Dockerfile
+  const install = [
+    `#!${shell}`, 'set -eu;', 'export DEBIAN_FRONTEND=noninteractive;',
+    core.getInput('install'),
+  ].join('\n');
+  fs.writeFileSync(
+    // Must be in same directory as Dockerfiles
+    path.join(__dirname, '..', 'Dockerfiles', 'run-on-arch-install.sh'),
+    install,
+  );
+
   // Write container commands to a script file for running
-  let commands = core.getInput('run', { required: true });
-  commands = `#!${shell}\nset -eu\n${commands}`;
+  const commands = [
+    `#!${shell}`, 'set -eu;', core.getInput('run', { required: true }),
+  ].join('\n');
   fs.writeFileSync(
     path.join(__dirname, 'run-on-arch-commands.sh'),
     commands,
   );
 
-  // Sanitize dockerRunArgs: replace escaped and unescaped newlines with a space
-  let dockerRunArgs = (core.getInput('dockerRunArgs') || '')
-    .replace(/\\?[\r\n]+/g, ' ');
+  // Parse dockerRunArgs into an array with shlex
+  const dockerRunArgs = shlex.split(core.getInput('dockerRunArgs'));
 
-  const githubToken = core.getInput('githubToken') || '';
+  const githubToken = core.getInput('githubToken');
 
   // Copy environment variables from parent process
   const env = { ...process.env };
@@ -76,7 +88,7 @@ async function main() {
         throw new Error(`run-on-arch: env ${key} value must be flat.`);
       }
       env[key] = value;
-      dockerRunArgs += ` -e ${key} `;
+      dockerRunArgs.push(`-e${key}`);
     });
   }
 
@@ -86,7 +98,7 @@ async function main() {
   console.log('Configuring Docker for multi-architecture support')
   await exec(
     path.join(__dirname, 'run-on-arch.sh'),
-    [ dockerFile, dockerRunArgs, containerName, shell],
+    [ dockerFile, containerName, ...dockerRunArgs ],
     { env },
   );
 }

@@ -1,5 +1,5 @@
-
-on: [push]
+name: Basic Example
+on: [push, pull_request]
 
 jobs:
   armv7_job:

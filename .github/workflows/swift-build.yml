@@ -1,5 +1,5 @@
-name: swift-build
-on: [push,pull_request]
+name: Build with Swift on armv7
+on: [push, pull_request]
 
 jobs:
   testactions_job:
@@ -8,17 +8,19 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Build with Swift on armv7
+    - name: Build
       uses: ./
       with:
         arch: armv7
         distro: ubuntu18.04
         githubToken: ${{ github.token }}
-        run: |
-          export DEBIAN_FRONTEND=noninteractive
-          apt-get update -q
+        install: |
+          apt-get update -q -y
           apt install -q -y libatomic1 libbsd0 clang libicu-dev libcurl4-nss-dev curl
-          curl -OL https://github.com/uraimo/buildSwiftOnARM/releases/download/5.0.3/swift-5.0.3-armv7-Ubuntu1804.tgz
+          curl -L https://github.com/uraimo/buildSwiftOnARM/releases/download/5.0.3/swift-5.0.3-armv7-Ubuntu1804.tgz -o /root/swift-5.0.3-armv7-Ubuntu1804.tgz
+
+        run: |
+          cd /root
           tar xzf swift-5.0.3-armv7-Ubuntu1804.tgz
           echo "import Glibc;puts(\"Test!\");print(\"Test!!\")" > test.swift
           ./usr/bin/swiftc test.swift
