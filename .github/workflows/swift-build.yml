@@ -15,7 +15,7 @@ jobs:
         distro: ubuntu18.04
         githubToken: ${{ github.token }}
         install: |
-          apt-get update -q
+          apt-get update -q -y
           apt install -q -y libatomic1 libbsd0 clang libicu-dev libcurl4-nss-dev curl
           curl -L https://github.com/uraimo/buildSwiftOnARM/releases/download/5.0.3/swift-5.0.3-armv7-Ubuntu1804.tgz -o /root/swift-5.0.3-armv7-Ubuntu1804.tgz
 

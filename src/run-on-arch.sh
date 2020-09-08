@@ -34,7 +34,7 @@ install_deps () {
   # Install support for non-amd64 emulation in Docker via QEMU.
   # Platforms: linux/arm64, linux/riscv64, linux/ppc64le, linux/s390x,
   #            linux/386, linux/arm/v7, linux/arm/v6
-  sudo apt-get update -y
+  sudo apt-get update -q -y
   sudo apt-get -qq install -y qemu qemu-user-static
   docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 }
