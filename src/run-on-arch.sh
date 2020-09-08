@@ -10,7 +10,8 @@ declare -a DOCKER_RUN_ARGS=${@:3:${#@}}
 
 # Defaults
 ACTION_DIR="$(cd "$(dirname "$0")"/.. >/dev/null 2>&1 ; pwd -P)"
-PACKAGE_REGISTRY="docker.pkg.github.com/${GITHUB_REPOSITORY}/${CONTAINER_NAME}"
+LOWERCASE_REPOSITORY=$(printf "%s" "$GITHUB_REPOSITORY" | tr '[:lower:]' '[:upper:]')
+PACKAGE_REGISTRY="docker.pkg.github.com/${LOWERCASE_REPOSITORY}/${CONTAINER_NAME}"
 DEBIAN_FRONTEND=noninteractive
 
 show_build_log_and_exit () {
