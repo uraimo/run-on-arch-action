@@ -1,6 +1,6 @@
 {
   "name": "run-on-arch",
-  "version": "2.0.2",
+  "version": "2.0.5",
   "description": "Multi architecture support for GitHub Actions",
   "author": "Umberto Raimondi, Elijah Shaw-Rutschman",
   "license": "BSD-3-Clause",

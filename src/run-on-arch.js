@@ -92,8 +92,11 @@ async function main() {
     });
   }
 
-  // Generate a container name slug unique to this arch/distro combo
-  const containerName = `run-on-arch-${slug(env.GITHUB_REPOSITORY)}-${slug(arch)}-${slug(distro)}`;
+  // Generate a container name slug unique to this workflow
+  const containerName = slug([
+    'run-on-arch', env.GITHUB_REPOSITORY, env.GITHUB_WORKFLOW,
+    arch, distro,
+  ].join('-'));
 
   console.log('Configuring Docker for multi-architecture support')
   await exec(

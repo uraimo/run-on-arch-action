@@ -32,7 +32,7 @@ quiet () {
 }
 
 install_deps () {
-  # Install support for non-amd64 emulation in Docker via QEMU.
+  # Install support for non-x86 emulation in Docker via QEMU.
   # Platforms: linux/arm64, linux/riscv64, linux/ppc64le, linux/s390x,
   #            linux/386, linux/arm/v7, linux/arm/v6
   sudo apt-get update -q -y
