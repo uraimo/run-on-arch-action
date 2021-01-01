@@ -40,10 +40,17 @@ async function main() {
       shell = '/bin/bash';
     }
   }
+  let installShell;
+  if (/alpine/.test(distro)) {
+    // Alpine has busybox and must use /bin/sh at least for installation.
+    installShell = '/bin/sh';
+  } else {
+    installShell = shell;
+  }
 
   // Write install commands to a script file for running in the Dockerfile
   const install = [
-    `#!${shell}`, 'set -eu;', 'export DEBIAN_FRONTEND=noninteractive;',
+    `#!${installShell}`, 'set -eu;', 'export DEBIAN_FRONTEND=noninteractive;',
     core.getInput('install'),
   ].join('\n');
   fs.writeFileSync(
