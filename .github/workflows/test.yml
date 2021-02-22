@@ -25,6 +25,8 @@ jobs:
             distro: stretch
           - arch: armv7
             distro: fedora_latest
+          - arch: aarch64
+            distro: manjaro_latest
           - arch: armv7
             distro: ubuntu18.04
           - arch: aarch64
@@ -96,6 +98,9 @@ jobs:
               pacman -Syyu --noconfirm
               pacman -S git which --noconfirm
               ln -s /usr/lib/os-release /etc/os-release
+              ;;
+            manjaro*)
+              sudo pacman -Syyu --noconfirm git which
               ;;
           esac
 
@@ -184,6 +189,7 @@ jobs:
           ubuntu*) distro_key="ubuntu" ;;
           fedora*) distro_key="fedora" ;;
           archarm*) distro_key="archarm" ;;
+          manjaro*) distro_key="manjaro" ;;
           *) distro_key="${{ matrix.distro }}" ;;
         esac
 
