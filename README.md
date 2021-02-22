@@ -151,9 +151,10 @@ This table details the valid `arch`/`distro` combinations:
 | -------- | ---------- |
 | armv6    | jessie, stretch, buster, bullseye, alpine_latest |
 | armv7    | jessie, stretch, buster, bullseye, ubuntu16.04, ubuntu18.04, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest, archarm_latest |
-| aarch64  | stretch, buster, bullseye, ubuntu16.04, ubuntu18.04, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest, archarm_latest |
+| aarch64  | stretch, buster, bullseye, ubuntu16.04, ubuntu18.04, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest, archarm_latest, manjaro-latest |
 | s390x    | jessie, stretch, buster, bullseye, ubuntu16.04, ubuntu18.04, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest |
 | ppc64le  | jessie, stretch, buster, bullseye, ubuntu16.04, ubuntu18.04,ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest |
+| amd64 | manjaro-latest |
 
 
 Using an invalid `arch`/`distro` combination will fail.
