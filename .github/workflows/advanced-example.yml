@@ -17,6 +17,8 @@ jobs:
             distro: alpine_latest
           - arch: s390x
             distro: fedora_latest
+          - arch: armv7
+            distro: archarm_latest
 
     steps:
       - uses: actions/checkout@v2.1.0
@@ -65,6 +67,9 @@ jobs:
                 apk update
                 apk add git
                 ;;
+              archarm*)
+                pacman -Syyu --noconfirm
+                pacman -S git which --noconfirm
             esac
 
           # Produce a binary artifact and place it in the mounted volume

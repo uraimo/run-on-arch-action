@@ -12,6 +12,8 @@ jobs:
           # The full matrix of Dockerfiles would be extensive, so just
           # cover each arch and OS at least once.
           - arch: aarch64
+            distro: archarm_latest
+          - arch: aarch64
             distro: fedora_latest
           - arch: ppc64le
             distro: alpine_latest
@@ -88,6 +90,11 @@ jobs:
               apk update
               apk add git
               ;;
+            archarm*)
+              pacman -Syyu --noconfirm
+              pacman -S git which --noconfirm
+              ln -s /usr/lib/os-release /etc/os-release
+              ;;
           esac
 
         # Run on container
@@ -136,8 +143,13 @@ jobs:
       run: |
         git_path="${{ steps.build.outputs.git_path }}"
 
-        echo "Assert git path: '$git_path' == '/usr/bin/git'"
-        test "$git_path" == "/usr/bin/git"
+        case "${{ matrix.distro }}" in
+          archarm*) expected_git_path="/usr/sbin/git" ;;
+          *) expected_git_path="/usr/bin/git" ;;
+        esac
+
+        echo "Assert git path: '$git_path' == '$expected_git_path'"
+        test "$git_path" == "$expected_git_path"
 
     - name: Assert job would fail on setup script error
       run: |
@@ -169,6 +181,7 @@ jobs:
           alpine*) distro_key="alpine" ;;
           ubuntu*) distro_key="ubuntu" ;;
           fedora*) distro_key="fedora" ;;
+          archarm*) distro_key="archarm" ;;
           *) distro_key="${{ matrix.distro }}" ;;
         esac
 
