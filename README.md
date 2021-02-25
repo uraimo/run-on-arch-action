@@ -11,7 +11,7 @@ A GitHub Action that executes commands on non-x86 CPU architecture (armv6, armv7
 This action requires three input parameters:
 
 * `arch`: CPU architecture: `armv6`, `armv7`, `aarch64`, `s390x`, or `ppc64le`. See [Supported Platforms](#supported-platforms) for the full matrix.
-* `distro`: Linux distribution name: `ubuntu16.04`, `ubuntu18.04`, `ubuntu20.04`, `buster`, `stretch`, `jessie`, `fedora_latest`, `alpine_latest` or `archarm`. See [Supported Platforms](#supported-platforms) for the full matrix.
+* `distro`: Linux distribution name: `ubuntu16.04`, `ubuntu18.04`, `ubuntu20.04`, `buster`, `stretch`, `jessie`, `fedora_latest`, `alpine_latest` or `archarm_latest`. See [Supported Platforms](#supported-platforms) for the full matrix.
 * `run`: Shell commands to execute in the container.
 
 The action also accepts some optional input parameters:
