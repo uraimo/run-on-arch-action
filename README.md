@@ -170,6 +170,8 @@ New distros and archs can be added simply by creating a Dockerfile named `Docker
 
 [Elijah Shaw-Rutschman](https://github.com/elijahr)
 
+And many other [contributors](https://github.com/uraimo/run-on-arch-action/graphs/contributors).
+
 ## License
 
 This project is licensed under the [BSD 3-Clause License](https://github.com/uraimo/run-on-arch-action/blob/master/LICENSE).
