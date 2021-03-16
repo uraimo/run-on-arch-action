@@ -1,4 +1,4 @@
-FROM ppc64le/debian:stretch
+FROM --platform=linux/amd64 ppc64le/debian:stretch
 
 COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh
 RUN chmod +x /root/run-on-arch-install.sh && /root/run-on-arch-install.sh

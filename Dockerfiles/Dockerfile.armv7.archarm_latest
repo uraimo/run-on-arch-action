@@ -1,4 +1,4 @@
-FROM agners/archlinuxarm-arm32v7:latest
+FROM --platform=linux/amd64 agners/archlinuxarm-arm32v7:latest
 
 COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh
 RUN chmod +x /root/run-on-arch-install.sh && /root/run-on-arch-install.sh
