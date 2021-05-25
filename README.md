@@ -11,7 +11,7 @@ A GitHub Action that executes commands on non-x86 CPU architecture (armv6, armv7
 This action requires three input parameters:
 
 * `arch`: CPU architecture: `armv6`, `armv7`, `aarch64`, `s390x`, or `ppc64le`. See [Supported Platforms](#supported-platforms) for the full matrix.
-* `distro`: Linux distribution name: `ubuntu16.04`, `ubuntu18.04`, `ubuntu20.04`, `buster`, `stretch`, `jessie`, `fedora_latest`, `alpine_latest` or `archarm_latest`. See [Supported Platforms](#supported-platforms) for the full matrix.
+* `distro`: Linux distribution name: `ubuntu16.04`, `ubuntu18.04`, `ubuntu20.04`, `bullseye`, `buster`, `stretch`, `jessie`, `fedora_latest`, `alpine_latest` or `archarm_latest`. See [Supported Platforms](#supported-platforms) for the full matrix.
 * `run`: Shell commands to execute in the container.
 
 The action also accepts some optional input parameters:
@@ -118,7 +118,7 @@ jobs:
           # no secrets are present in the container state or logs.
           install: |
             case "${{ matrix.distro }}" in
-              ubuntu*|jessie|stretch|buster)
+              ubuntu*|jessie|stretch|buster|bullseye)
                 apt-get update -q -y
                 apt-get install -q -y git
                 ;;
@@ -153,7 +153,7 @@ This table details the valid `arch`/`distro` combinations:
 | -------- | ---------- |
 | armv6    | jessie, stretch, buster, alpine_latest |
 | armv7    | jessie, stretch, buster, ubuntu16.04, ubuntu18.04, ubuntu20.04, fedora_latest, alpine_latest, archarm_latest |
-| aarch64  | stretch, buster, ubuntu16.04, ubuntu18.04, ubuntu20.04, fedora_latest, alpine_latest, archarm_latest |
+| aarch64  | stretch, buster, bullseye, ubuntu16.04, ubuntu18.04, ubuntu20.04, fedora_latest, alpine_latest, archarm_latest |
 | s390x    | jessie, stretch, buster, ubuntu16.04, ubuntu18.04, ubuntu20.04, fedora_latest, alpine_latest |
 | ppc64le  | jessie, stretch, buster, ubuntu16.04, ubuntu18.04,ubuntu20.04, fedora_latest, alpine_latest |
 
