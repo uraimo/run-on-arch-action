@@ -1,7 +1,5 @@
 # Run-On-Arch GitHub Action
 
-
-
 [![](https://github.com/uraimo/run-on-arch-action/workflows/test/badge.svg)](https://github.com/uraimo/run-on-arch-action)
 
 A GitHub Action that executes commands on non-x86 CPU architecture (armv6, armv7, aarch64, s390x, ppc64le).
