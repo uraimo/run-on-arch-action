@@ -10,27 +10,15 @@ jobs:
       matrix:
         include:
           # The full matrix of Dockerfiles would be extensive, so just
-          # cover each arch and OS at least once.
-          - arch: aarch64
-            distro: fedora_latest
-          - arch: ppc64le
-            distro: alpine_latest
-          - arch: armv6
-            distro: buster
-          - arch: armv7
-            distro: jessie
-          - arch: s390x
-            distro: stretch
-          - arch: armv7
-            distro: fedora_latest
-          - arch: aarch64
-            distro: manjaro_latest
-          - arch: armv7
-            distro: ubuntu18.04
-          - arch: aarch64
-            distro: bullseye  
-            # Run tests that only need to be run on one matrix node
-            run_extra_tests: true
+          # cover some important use-cases.
+          - platform: linux/arm64
+            image: ubuntu:20.04
+          - platform: linux/amd64
+            image: ubuntu:20.04
+          - platform: linux/arm64
+            image: manjaro:latest
+          - platform: linux/amd64
+            image: manjaro:latest
 
     steps:
     - name: Checkout
@@ -41,8 +29,8 @@ jobs:
       uses: ./
       with:
         githubToken: ${{ github.token }}
-        arch: ${{ matrix.arch }}
-        distro: ${{ matrix.distro }}
+        platform: ${{ matrix.platform }}
+        image: ${{ matrix.image }}
         env: |
           env_arch: ${{ matrix.arch }}
           env_distro: ${{ matrix.distro }}
@@ -83,19 +71,6 @@ jobs:
             ubuntu*|jessie|stretch|buster|bullseye)
               apt-get update -q -y
               apt-get install -q -y git
-              ;;
-            fedora*)
-              dnf -y update
-              dnf -y install git which
-              ;;
-            alpine*)
-              apk update
-              apk add git
-              ;;
-            archarm*)
-              pacman -Syyu --noconfirm
-              pacman -S git which --noconfirm
-              ln -s /usr/lib/os-release /etc/os-release
               ;;
             manjaro*)
               sudo pacman -Syyu --noconfirm git which
@@ -183,10 +158,7 @@ jobs:
         distro_info="${{ steps.build.outputs.distro_info }}"
 
         case "${{ matrix.distro }}" in
-          alpine*) distro_key="alpine" ;;
           ubuntu*) distro_key="ubuntu" ;;
-          fedora*) distro_key="fedora" ;;
-          archarm*) distro_key="archarm" ;;
           manjaro*) distro_key="manjaro" ;;
           *) distro_key="${{ matrix.distro }}" ;;
         esac
@@ -236,35 +208,3 @@ jobs:
 
         echo "Assert volume_5_ls: '$volume_5_ls' == 'file_5'"
         test "$volume_5_ls" == "file_5"
-
-    - name: Assert container determines correct default shell for distro
-      run: |
-        shebang="${{ steps.build.outputs.shebang }}"
-
-        case "${{ matrix.distro }}" in
-          alpine*) expected_shebang="#!/bin/sh" ;;
-          *) expected_shebang="#!/bin/bash" ;;
-        esac
-
-        echo "Assert shebang: '$shebang' == '$expected_shebang'"
-        test "$shebang" == "$expected_shebang"
-
-    - name: Build and run other container (custom shell, no githubToken)
-      if: ${{ matrix.run_extra_tests }}
-      id: build_custom_shell
-      uses: ./
-      with:
-        arch: ${{ matrix.arch }}
-        distro: ${{ matrix.distro }}
-        shell: /bin/dash
-        run: |
-          # Run on container
-          echo ::set-output name=shebang::$(head -n 1 "$0")
-
-    - name: Assert container uses custom shell
-      if: ${{ matrix.run_extra_tests }}
-      run: |
-        shebang="${{ steps.build_custom_shell.outputs.shebang }}"
-
-        echo "Assert shebang: '$shebang' == '#!/bin/dash'"
-        test "$shebang" == "#!/bin/dash"
