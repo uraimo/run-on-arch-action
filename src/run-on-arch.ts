@@ -1,125 +1,96 @@
-const core = require('@actions/core')
-const fs = require('fs');
-const path = require('path')
-const YAML = require('yaml');
-const shlex = require('shlex');
-const { exec } = require('@actions/exec')
+import core from "@actions/core";
+import fs from "fs";
+import path from "path";
+import shlex from "shlex";
+import { exec } from "@actions/exec";
 
 function slug(str: string) {
-  return str.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+  return str.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase();
 }
 
-const archToDockerPlatform: Record<string,string> = {
-  "amd64": "linux/amd64",
-  "aarch64": "linux/arm64",
-  "arm64": "linux/arm64",
-  "armv6": "linux/arm/v6",
-  "armv7": "linux/arm/v7",
-  "ppc64le": "linux/ppc64le",
-  "s390x": "linux/s390x"
-}
+const platforms = [
+  "linux/amd64",
+  "linux/arm64",
+  "linux/arm/v6",
+  "linux/arm/v7",
+  "linux/ppc64le",
+  "linux/s390x",
+] as const;
+
+type Platform = typeof platforms[number];
+
+const assetsDir = path.join(__dirname, "assets");
 
 async function main() {
-  if (process.platform !== 'linux') {
-    throw new Error('run-on-arch supports only Linux')
-  }
+  const platform = core.getInput("platform", { required: true }) as Platform;
+  if (!platforms.includes(platform))
+    throw new Error(`${platform} is not a supported platform yet`);
 
-  const arch = core.getInput('arch', { required: true }) as string;
-  const distro = core.getInput('distro', { required: true });
+  const baseImage = core.getInput("image", { required: true });
 
-  // If bad arch/distro passed, fail fast before installing all the qemu stuff
-  const dockerFile = path.join(
-    __dirname, '..', 'Dockerfiles', `Dockerfile.${arch}.${distro}`);
-  if (!fs.existsSync(dockerFile)) {
-    throw new Error(`run-on-arch: ${dockerFile} does not exist.`);
-  }
+  // pull docker image first so we know if this just doesn't exist
+  await exec(`docker pull --platform ${platform} ${baseImage}`);
+
+  //
 
   // Write setup commands to a script file for sourcing
-  let setup = core.getInput('setup');
-  fs.writeFileSync(
-    path.join(__dirname, 'run-on-arch-setup.sh'),
-    setup,
-  );
+  const setup = core.getInput("setup");
+  fs.writeFileSync(path.join(assetsDir, "run-on-arch-setup.sh"), setup);
 
   // If no shell provided, default to sh for alpine, bash for others
-  let shell = core.getInput('shell');
-  if (!shell) {
-    if (/alpine/.test(distro)) {
-      shell = '/bin/sh';
-    } else {
-      shell = '/bin/bash';
-    }
-  }
+  const shell = core.getInput("shell", { required: true });
 
   // Write install commands to a script file for running in the Dockerfile
-  const install = [
-    `#!${shell}`, 'set -eu;', 'export DEBIAN_FRONTEND=noninteractive;',
-    core.getInput('install'),
-  ].join('\n');
+  const installScript = [
+    `#!/bin/${shell}`,
+    "set -eu;",
+    "export DEBIAN_FRONTEND=noninteractive;",
+    core.getInput("install"),
+  ].join("\n");
+
   fs.writeFileSync(
-    // Must be in same directory as Dockerfiles
-    path.join(__dirname, '..', 'Dockerfiles', 'run-on-arch-install.sh'),
-    install,
+    path.join(assetsDir, "run-on-arch-install.sh"),
+    installScript
   );
 
   // Write container commands to a script file for running
   const commands = [
-    `#!${shell}`, 'set -eu;', core.getInput('run', { required: true }),
-  ].join('\n');
-  fs.writeFileSync(
-    path.join(__dirname, 'run-on-arch-commands.sh'),
-    commands,
-  );
+    `#!${shell}`,
+    "set -eu;",
+    core.getInput("run", { required: true }),
+  ].join("\n");
+  fs.writeFileSync(path.join(assetsDir, "run-on-arch-commands.sh"), commands);
 
   // Parse dockerRunArgs into an array with shlex
-  const dockerRunArgs = shlex.split(core.getInput('dockerRunArgs'));
+  const dockerRunArgs = shlex.split(core.getInput("dockerRunArgs"));
 
-  const githubToken = core.getInput('githubToken');
-
-  // Copy environment variables from parent process
-  const env = { ...process.env };
-
-  if (githubToken) {
-    env.GITHUB_TOKEN = githubToken;
-  }
-
-  // Parse YAML and for environment variables.
-  // They are imported to the container via passing `-e VARNAME` to
-  // docker run.
-  const envYAML = core.getInput('env');
-  if (envYAML) {
-    const mapping = YAML.parse(envYAML)
-    if (typeof mapping !== 'object' || mapping instanceof Array) {
-      throw new Error(`run-on-arch: env must be a flat mapping of key/value pairs.`);
-    }
-    Object.entries(mapping).forEach(([key, value]) => {
-      if (typeof value === 'object') {
-        // Nested YAML is invalid
-        throw new Error(`run-on-arch: env ${key} value must be flat.`);
-      }
-      env[key] = String(value);
-      dockerRunArgs.push(`-e${key}`);
-    });
-  }
+  const githubToken = core.getInput("githubToken");
 
   // Generate a container name slug unique to this workflow
-  const containerName = slug([
-    'run-on-arch', env.GITHUB_REPOSITORY, env.GITHUB_WORKFLOW,
-    arch, distro,
-  ].join('-'));
+  const containerName = slug(
+    [
+      "run-on-arch",
+      process.env.GITHUB_REPOSITORY,
+      process.env.GITHUB_WORKFLOW,
+      platform,
+      baseImage,
+    ].join("-")
+  );
 
-  // forcing a specific platform to be run due to
-  // https://github.com/moby/moby/issues/36552#issuecomment-582051871
-  const dockerPlatform = archToDockerPlatform[arch] || archToDockerPlatform.amd64
+  console.log("Configuring Docker for multi-architecture support");
 
-  console.log('Configuring Docker for multi-architecture support')
   await exec(
-    path.join(__dirname, 'run-on-arch.sh'),
-    [ dockerFile, containerName, dockerPlatform, ...dockerRunArgs ],
-    { env },
+    path.join(assetsDir, "run-on-arch.sh"),
+    [baseImage, containerName, platform, ...dockerRunArgs],
+    {
+      env: {
+        ...process.env,
+        GITHUB_TOKEN: githubToken ?? process.env.GITHUB_TOKEN,
+      } as Record<string, string>,
+    }
   );
 }
 
-main().catch(err => {
-  core.setFailed(err.message)
-})
+main().catch((err) => {
+  core.setFailed(err.message);
+});

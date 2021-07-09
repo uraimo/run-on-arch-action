@@ -3,7 +3,7 @@
 set -euo pipefail
 
 # Args
-DOCKERFILE=$1
+BASE_IMAGE=$1
 CONTAINER_NAME=$2
 DOCKER_PLATFORM=$3
 # Remainder of args get passed to docker
@@ -51,8 +51,9 @@ build_container () {
     docker build \
       --platform $DOCKER_PLATFORM \
       --pull \
-      "${ACTION_DIR}/Dockerfiles" \
-      --file "$DOCKERFILE" \
+      "${ACTION_DIR}/assets" \
+      --build-arg BASE_IMAGE=${BASE_IMAGE} \
+      --file "assets/Dockerfile" \
       --tag "${CONTAINER_NAME}:latest"
   else
     # Build optimization that uses GitHub package registry to cache docker
@@ -87,7 +88,7 @@ run_container () {
   # Run the container.
 
   # Run user-provided setup script, in same shell
-  source "${ACTION_DIR}/src/run-on-arch-setup.sh"
+  source "${ACTION_DIR}/assets/run-on-arch-setup.sh"
 
   # Interpolate DOCKER_RUN_ARGS, to support evaluation of $VAR references
   for i in "${!DOCKER_RUN_ARGS[@]}"
@@ -95,7 +96,7 @@ run_container () {
     DOCKER_RUN_ARGS[$i]=$(eval echo "${DOCKER_RUN_ARGS[$i]}")
   done
 
-  chmod +x "${ACTION_DIR}/src/run-on-arch-commands.sh"
+  chmod +x "${ACTION_DIR}/assets/run-on-arch-commands.sh"
 
   # The location of the event.json file
   EVENT_DIR=$(dirname "$GITHUB_EVENT_PATH")
@@ -140,7 +141,7 @@ run_container () {
     --tty \
     ${DOCKER_RUN_ARGS[@]} \
     "${CONTAINER_NAME}:latest" \
-    "${ACTION_DIR}/src/run-on-arch-commands.sh"
+    "${ACTION_DIR}/assets/run-on-arch-commands.sh"
 }
 
 # Installing deps produces a lot of log noise, so we do so quietly

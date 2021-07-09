@@ -9,10 +9,9 @@
     "build": "ncc build --license LICENSE"
   },
   "dependencies": {
-    "@actions/core": "^1.2.6",
-    "@actions/exec": "^1.0.1",
-    "shlex": "^2.0.2",
-    "yaml": "^1.10.0"
+    "@actions/core": "^1.4.0",
+    "@actions/exec": "^1.1.0",
+    "shlex": "^2.1.0"
   },
   "devDependencies": {
     "@types/node": "^16.3.0",

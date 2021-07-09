@@ -25,9 +25,9 @@ inputs:
     description: 'Shell commands to execute in the container.'
     required: true
   shell:
-    description: 'The shell to run commands with in the container. Default: /bin/sh on alpine (because Alpine uses BusyBox), /bin/bash for other distros.'
+    description: 'The shell to run commands with in the container.'
     required: false
-    default: ''
+    default: 'bash'
   dockerRunArgs:
     description: 'Additional arguments to pass to docker run, such as volume mappings. See README for example usage.'
     required: false
