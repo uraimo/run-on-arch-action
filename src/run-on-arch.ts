@@ -5,11 +5,11 @@ const YAML = require('yaml');
 const shlex = require('shlex');
 const { exec } = require('@actions/exec')
 
-function slug(str) {
+function slug(str: string) {
   return str.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
 }
 
-const archToDockerPlatform = {
+const archToDockerPlatform: Record<string,string> = {
   "amd64": "linux/amd64",
   "aarch64": "linux/arm64",
   "arm64": "linux/arm64",
@@ -24,7 +24,7 @@ async function main() {
     throw new Error('run-on-arch supports only Linux')
   }
 
-  const arch = core.getInput('arch', { required: true });
+  const arch = core.getInput('arch', { required: true }) as string;
   const distro = core.getInput('distro', { required: true });
 
   // If bad arch/distro passed, fail fast before installing all the qemu stuff
@@ -97,7 +97,7 @@ async function main() {
         // Nested YAML is invalid
         throw new Error(`run-on-arch: env ${key} value must be flat.`);
       }
-      env[key] = value;
+      env[key] = String(value);
       dockerRunArgs.push(`-e${key}`);
     });
   }

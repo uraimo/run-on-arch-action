@@ -2,12 +2,21 @@
   "name": "run-on-arch",
   "version": "2.0.7",
   "description": "Multi architecture support for GitHub Actions",
-  "author": "Umberto Raimondi, Elijah Shaw-Rutschman",
+  "author": "Umberto Raimondi, Elijah Shaw-Rutschman, Jonas Strassel",
   "license": "BSD-3-Clause",
+  "main": "src/run-on-arch.ts",
+  "scripts": {
+    "build": "ncc build --license LICENSE"
+  },
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/exec": "^1.0.1",
     "shlex": "^2.0.2",
     "yaml": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/node": "^16.3.0",
+    "@vercel/ncc": "^0.28.6",
+    "typescript": "^4.3.5"
   }
 }

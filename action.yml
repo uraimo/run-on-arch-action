@@ -2,17 +2,17 @@ name: 'Run on architecture'
 branding:
   icon: 'cpu'
   color: 'green'
-description: 'Run commands in a Linux container with a specific CPU architecture (armv6, armv7, aarch64, s390x, ppc64le)'
-author: 'Umberto Raimondi, Elijah Shaw-Rutschman'
+description: 'Run commands in a container with a specific CPU architecture'
+author: 'Umberto Raimondi, Elijah Shaw-Rutschman, Jonas Strassel'
 inputs:
-  arch:
-    description: 'CPU architecture: armv6, armv7, aarch64, s390x, ppc64le.'
+  platform:
+    description: 'docker platform supported by qemu and the machine this actions runs on (sth like "linux/amd64" or "linux/arm64")'
     required: false
-    default: 'aarch64'
-  distro:
-    description: 'Linux distribution name: ubuntu16.04, ubuntu18.04, ubuntu20.04, bullseye, buster, stretch, jessie, fedora_latest, alpine_latest, archarm_latest.'
+    default: 'linux/arm64'
+  image:
+    description: 'docker image used as base - needs to support the given platform'
     required: false
-    default: 'ubuntu18.04'
+    default: 'ubuntu:20.04'
   githubToken:
     description: 'Your GitHub token, used for caching Docker images in your project''s public package registry. Usually this would just be $\{{ github.token }}. This speeds up builds and is highly recommended.'
     required: true
@@ -42,4 +42,4 @@ inputs:
 
 runs:
   using: 'node12'
-  main: 'src/run-on-arch.js'
+  main: 'dist/index.js'
