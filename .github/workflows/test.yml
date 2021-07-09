@@ -12,8 +12,6 @@ jobs:
           # The full matrix of Dockerfiles would be extensive, so just
           # cover each arch and OS at least once.
           - arch: aarch64
-            distro: archarm_latest
-          - arch: aarch64
             distro: fedora_latest
           - arch: ppc64le
             distro: alpine_latest
