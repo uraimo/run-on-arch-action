@@ -1,4 +1,0 @@
-FROM ppc64le/debian:bullseye
-
-COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh
-RUN chmod +x /root/run-on-arch-install.sh && /root/run-on-arch-install.sh
