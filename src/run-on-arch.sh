@@ -38,7 +38,9 @@ install_deps () {
   #            linux/386, linux/arm/v7, linux/arm/v6
   sudo apt-get update -q -y
   sudo apt-get -qq install -y qemu qemu-user-static
-  docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+  # adding --credential yes to support sudo properly
+  # https://github.com/multiarch/qemu-user-static/issues/17#issuecomment-518660227
+  docker run --rm --privileged multiarch/qemu-user-static --reset -p yes --credential yes
 }
 
 build_container () {
