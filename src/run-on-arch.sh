@@ -11,7 +11,7 @@ declare -a DOCKER_RUN_ARGS=${@:3:${#@}}
 # Defaults
 ACTION_DIR="$(cd "$(dirname "$0")"/.. >/dev/null 2>&1 ; pwd -P)"
 LOWERCASE_REPOSITORY=$(printf "%s" "$GITHUB_REPOSITORY" | tr '[:upper:]' '[:lower:]')
-PACKAGE_REGISTRY="docker.pkg.github.com/${LOWERCASE_REPOSITORY}/${CONTAINER_NAME}"
+PACKAGE_REGISTRY="ghcr.io/${LOWERCASE_REPOSITORY}/${CONTAINER_NAME}"
 DEBIAN_FRONTEND=noninteractive
 
 show_build_log_and_exit () {
@@ -62,7 +62,7 @@ build_container () {
     # Login without echoing token, just in case
     BASH_FLAGS="$-"
     set +x
-    echo "$GITHUB_TOKEN" | docker login docker.pkg.github.com \
+    echo "$GITHUB_TOKEN" | docker login ghcr.io \
       -u "$GITHUB_ACTOR" \
       --password-stdin
     set "$BASH_FLAGS"
