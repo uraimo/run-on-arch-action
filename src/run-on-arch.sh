@@ -32,12 +32,13 @@ quiet () {
 }
 
 install_deps () {
-  # Install support for non-x86 emulation in Docker via QEMU.
-  # Platforms: linux/arm64, linux/riscv64, linux/ppc64le, linux/s390x,
-  #            linux/386, linux/arm/v7, linux/arm/v6
-  sudo apt-get update -q -y
-  sudo apt-get -qq install -y qemu qemu-user-static
-  docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+  # Install support for non-x86 emulation in Docker via qemu-user-static
+  #
+  # Platforms: i386 i486 alpha arm armeb sparc32plus ppc ppc64 ppc64le m68k
+  #            mips mipsel mipsn32 mipsn32el mips64 mips64el sh4 sh4eb s390x
+  #            aarch64 aarch64_be hppa riscv32 riscv64 xtensa xtensaeb
+  #            microblaze microblazeel or1k x86_64
+  docker run --rm --privileged aptman/qus -s -- -p
 }
 
 build_container () {
