@@ -9,6 +9,16 @@ function slug(str) {
   return str.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
 }
 
+const archToDockerPlatform = {
+  "amd64": "linux/amd64",
+  "aarch64": "linux/arm64",
+  "arm64": "linux/arm64",
+  "armv6": "linux/arm/v6",
+  "armv7": "linux/arm/v7",
+  "ppc64le": "linux/ppc64le",
+  "s390x": "linux/s390x"
+}
+
 async function main() {
   if (process.platform !== 'linux') {
     throw new Error('run-on-arch supports only Linux')
@@ -98,10 +108,14 @@ async function main() {
     arch, distro,
   ].join('-'));
 
+  // forcing a specific platform to be run due to
+  // https://github.com/moby/moby/issues/36552#issuecomment-582051871
+  const dockerPlatform = archToDockerPlatform[arch] || archToDockerPlatform.amd64
+
   console.log('Configuring Docker for multi-architecture support')
   await exec(
     path.join(__dirname, 'run-on-arch.sh'),
-    [ dockerFile, containerName, ...dockerRunArgs ],
+    [ dockerFile, containerName, dockerPlatform, ...dockerRunArgs ],
     { env },
   );
 }

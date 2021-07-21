@@ -5,8 +5,9 @@ set -euo pipefail
 # Args
 DOCKERFILE=$1
 CONTAINER_NAME=$2
+DOCKER_PLATFORM=$3
 # Remainder of args get passed to docker
-declare -a DOCKER_RUN_ARGS=${@:3:${#@}}
+declare -a DOCKER_RUN_ARGS=${@:4:${#@}}
 
 # Defaults
 ACTION_DIR="$(cd "$(dirname "$0")"/.. >/dev/null 2>&1 ; pwd -P)"
@@ -37,7 +38,9 @@ install_deps () {
   #            linux/386, linux/arm/v7, linux/arm/v6
   sudo apt-get update -q -y
   sudo apt-get -qq install -y qemu qemu-user-static
-  docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+  # adding --credential yes to support sudo properly
+  # https://github.com/multiarch/qemu-user-static/issues/17#issuecomment-518660227
+  docker run --rm --privileged multiarch/qemu-user-static --reset -p yes --credential yes
 }
 
 build_container () {
@@ -48,6 +51,8 @@ build_container () {
   if [[ -z "${GITHUB_TOKEN:-}" ]]
   then
     docker build \
+      --platform $DOCKER_PLATFORM \
+      --pull \
       "${ACTION_DIR}/Dockerfiles" \
       --file "$DOCKERFILE" \
       --tag "${CONTAINER_NAME}:latest"
@@ -69,6 +74,8 @@ build_container () {
 
     docker pull "$PACKAGE_REGISTRY:latest" || true
     docker build \
+      --platform $DOCKER_PLATFORM \
+      --pull \
       "${ACTION_DIR}/Dockerfiles" \
       --file "$DOCKERFILE" \
       --tag "${CONTAINER_NAME}:latest" \
@@ -96,6 +103,7 @@ run_container () {
   EVENT_DIR=$(dirname "$GITHUB_EVENT_PATH")
 
   docker run \
+    --platform $DOCKER_PLATFORM \
     --workdir "${GITHUB_WORKSPACE}" \
     --rm \
     -e DEBIAN_FRONTEND=noninteractive \
