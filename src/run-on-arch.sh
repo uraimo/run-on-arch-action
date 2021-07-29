@@ -107,6 +107,7 @@ run_container () {
     -e GITHUB_ACTIONS \
     -e GITHUB_ACTOR \
     -e GITHUB_REPOSITORY \
+    -e GITHUB_ENV \
     -e GITHUB_EVENT_NAME \
     -e GITHUB_EVENT_PATH \
     -e GITHUB_WORKSPACE \
@@ -124,6 +125,7 @@ run_container () {
     -e GITHUB_EVENT_NAME \
     -e GITHUB_WORKSPACE \
     -e GITHUB_EVENT_PATH \
+    -e RUNNER_OS \
     -e RUNNER_TOOL_CACHE \
     -e RUNNER_TEMP \
     -e RUNNER_WORKSPACE \
