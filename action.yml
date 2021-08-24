@@ -17,6 +17,10 @@ inputs:
     description: 'Your GitHub token, used for caching Docker images in your project''s public package registry. Usually this would just be $\{{ github.token }}. This speeds up builds and is highly recommended.'
     required: true
     default: ''
+  cacheTag:
+    description: 'An arbitrary string, used to qualify the Docker images cached. Useful if you are building different images for the same arch/distro.'
+    required: false
+    default: ''
   env:
     description: 'Environment variables to propagate to the container. YAML, but must begin with a | character. These variables will be available in both run and setup.'
     required: false
