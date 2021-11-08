@@ -157,7 +157,7 @@ This table details the valid `arch`/`distro` combinations:
 | amd64    | buster, bullseye |
 | i386     | buster, bullseye |
 | mips64le | buster, bullseye |
-| riscv64  | buster, bullseye |
+| riscv64  | unstable, experimental |
 
 
 Using an invalid `arch`/`distro` combination will fail.
