@@ -44,7 +44,7 @@ jobs:
           echo ::set-output name=host_shell_options::"$-"
           
           # List all qemu packages, including qemu-user-static platforms
-          apt-get list --installed | grep qemu
+          ls -al /usr/bin/qemu-*
 
         install: |
               apt-get update -q -y
