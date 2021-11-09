@@ -36,7 +36,7 @@ jobs:
           - arch: mips64le
             distro: bullseye
           - arch: risv64
-            distro: bullseye
+            distro: unstable
             # Run tests that only need to be run on one matrix node
             run_extra_tests: true
 
