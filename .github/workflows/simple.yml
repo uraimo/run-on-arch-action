@@ -1,4 +1,4 @@
-name: Unit Tests
+name: Basic Test
 on: [push, pull_request]
 
 jobs:
