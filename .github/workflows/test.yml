@@ -65,7 +65,7 @@ jobs:
           echo ::set-output name=host_shell_options::"$-"
           
           # List all qemu packages, including qemu-user-static platforms
-          yum list installed | grep qemu
+          apt-get list --installed | grep qemu
 
           # Setup volumes
           mkdir "${PWD}/volume_1"
