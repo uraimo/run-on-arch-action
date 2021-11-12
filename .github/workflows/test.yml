@@ -178,6 +178,7 @@ jobs:
         case "${{ matrix.arch }}" in
           armv6) expected_arch="armv6l" ;;
           armv7) expected_arch="armv7l" ;;
+          mips64le) expected_arch="mips64" ;;
           *) expected_arch="${{ matrix.arch }}" ;;
         esac
 
