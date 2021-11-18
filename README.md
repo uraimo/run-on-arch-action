@@ -165,6 +165,7 @@ Using an invalid `arch`/`distro` combination will fail.
 ## Contributing
 
 New distros and archs can be added simply by creating a Dockerfile named `Dockerfile.{arch}.{distro}` (that targets an image for the desired combination) in the [Dockerfiles](https://github.com/uraimo/run-on-arch-action/blob/master/Dockerfiles) directory. Pull requests welcome!
+Note: If you're adding an i386 architecture distro, make sure that the Dockerfile contains `ENTRYPOINT ["linux32", "--"]`, otherwise it uname will report incorrect architecture.
 
 ## Authors
 
