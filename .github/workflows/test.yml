@@ -196,6 +196,7 @@ jobs:
           ubuntu*) distro_key="ubuntu" ;;
           fedora*) distro_key="fedora" ;;
           archarm*) distro_key="archarm" ;;
+          unstable) distro_key="pretty_name=debian gnu/linux bookworm/sid;name=debian gnu/linux;id=debian;home_url=https://www.debian.org/;support_url=https://www.debian.org/support;bug_report_url=https://bugs.debian.org/;" ;;
           *) distro_key="${{ matrix.distro }}" ;;
         esac
 
