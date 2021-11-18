@@ -35,6 +35,8 @@ jobs:
             distro: bullseye
           - arch: mips64le
             distro: bullseye
+          - arch: i386
+            distro: alpine_latest
           - arch: riscv64
             distro: unstable
             # Run tests that only need to be run on one matrix node
