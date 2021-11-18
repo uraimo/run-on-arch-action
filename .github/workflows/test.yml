@@ -7,7 +7,6 @@ jobs:
     name: Test
 
     strategy:
-      fail-fast: false
       matrix:
         include:
           # The full matrix of Dockerfiles would be extensive, so just
