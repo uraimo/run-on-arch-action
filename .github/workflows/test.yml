@@ -179,6 +179,8 @@ jobs:
           armv6) expected_arch="armv6l" ;;
           armv7) expected_arch="armv7l" ;;
           mips64le) expected_arch="mips64" ;;
+          i386) expected_arch="i686" ;;
+          amd64) expected_arch="x86_64" ;;
           *) expected_arch="${{ matrix.arch }}" ;;
         esac
 
