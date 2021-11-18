@@ -72,7 +72,7 @@ jobs:
           echo ::set-output name=host_env_arch::"$env_arch"
           echo ::set-output name=host_env_distro::"$env_distro"
           echo ::set-output name=host_shell_options::"$-"
-
+          
           # Setup volumes
           mkdir "${PWD}/volume_1"
           touch "${PWD}/volume_1/file_1"

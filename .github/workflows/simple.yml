@@ -1,0 +1,73 @@
+name: Basic Test
+on: [push, pull_request]
+
+jobs:
+  testactions_job:
+    runs-on: ubuntu-latest
+    name: Test
+
+    strategy:
+      matrix:
+        include:
+          - arch: aarch64
+            distro: bullseye  
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Build and run container
+      id: build
+      uses: ./
+      with:
+        arch: ${{ matrix.arch }}
+        distro: ${{ matrix.distro }}
+        env: |
+          env_arch: ${{ matrix.arch }}
+          env_distro: ${{ matrix.distro }}
+
+        # Test multiple argument formats
+        dockerRunArgs: |
+          -v "${PWD}/volume_1:/volume_1"
+          --volume=${PWD}/volume_2:/volume_2
+          "-v${PWD}/volume_3:/volume_3"
+          -v "${PWD}/volume_4:/volume_4" -v "${PWD}/volume_5:/volume_5"
+
+        # Sourced on host, after container build, before container run
+        setup: |
+          distro_info=$(cat /etc/*-release | tr '[:upper:]' '[:lower:]' | tr '"' ' ' | tr '\n' ' ')
+
+          echo ::set-output name=host_arch::"$(uname -m)"
+          echo ::set-output name=host_distro_info::"$distro_info"
+          echo ::set-output name=host_env_arch::"$env_arch"
+          echo ::set-output name=host_env_distro::"$env_distro"
+          echo ::set-output name=host_shell_options::"$-"
+          
+          # List all qemu packages, including qemu-user-static platforms
+          ls -al /usr/bin/qemu-*
+
+        install: |
+              apt-get update -q -y
+              apt-get install -q -y git
+
+        # Run on container
+        run: |
+          distro_info=$(cat /etc/*-release | tr '[:upper:]' '[:lower:]' | sed 's/"//g' | tr '\n' ';')
+
+          echo ::set-output name=arch::"$(uname -m)"
+          echo ::set-output name=distro_info::"$distro_info"
+          echo ::set-output name=shebang::"$(head -n 1 "$0")"
+          echo ::set-output name=env_arch::"$env_arch"
+          echo ::set-output name=env_distro::"$env_distro"
+          echo ::set-output name=shell_options::"$-"
+
+    - name: Assert container receives environment variables
+      run: |
+        arch="${{ steps.build.outputs.env_arch }}"
+        distro="${{ steps.build.outputs.env_distro }}"
+
+        echo "Assert env_arch: '$arch' == '${{ matrix.arch }}'"
+        test "$arch" == "${{ matrix.arch }}"
+
+        echo "Assert env_distro: '$distro' == '${{ matrix.distro }}'"
+        test "$distro" == "${{ matrix.distro }}"
