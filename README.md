@@ -155,7 +155,7 @@ This table details the valid `arch`/`distro` combinations:
 | s390x    | jessie, stretch, buster, bullseye, ubuntu16.04, ubuntu18.04, ubuntu20.04, fedora_latest, alpine_latest |
 | ppc64le  | jessie, stretch, buster, bullseye, ubuntu16.04, ubuntu18.04,ubuntu20.04, fedora_latest, alpine_latest |
 | amd64    | buster, bullseye |
-| i386     | buster, bullseye |
+| i386     | buster, bullseye, alpine_lastest |
 | mips64le | buster, bullseye |
 | riscv64  | unstable, experimental |
 
