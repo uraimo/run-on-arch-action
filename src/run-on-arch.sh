@@ -93,6 +93,7 @@ run_container () {
   echo "**** X-1 ${ACTION_DIR}"
   chmod +x "${ACTION_DIR}/src/run-on-arch-commands.sh"
   ls -l "${ACTION_DIR}/src/run-on-arch-commands.sh"
+  cat "${ACTION_DIR}/src/run-on-arch-commands.sh"
   echo "**** X-2"
 
   # The location of the event.json file
