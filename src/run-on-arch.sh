@@ -104,6 +104,8 @@ run_container () {
 
   echo "**** X-4 $EVENT_DIR"
   ls -l "${ACTION_DIR}/src/run-on-arch-commands.sh"
+  cat "${ACTION_DIR}/src/run-on-arch-commands.sh"
+  echo "RUN ..."
   docker run \
     --workdir "${GITHUB_WORKSPACE}" \
     --rm \
