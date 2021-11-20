@@ -100,8 +100,10 @@ run_container () {
   # The location of the event.json file
   echo "**** X-3"
   EVENT_DIR=$(dirname "$GITHUB_EVENT_PATH")
+  ls -l "${ACTION_DIR}/src/run-on-arch-commands.sh"
 
   echo "**** X-4 $EVENT_DIR"
+  ls -l "${ACTION_DIR}/src/run-on-arch-commands.sh"
   docker run \
     --workdir "${GITHUB_WORKSPACE}" \
     --rm \
