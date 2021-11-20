@@ -105,6 +105,45 @@ run_container () {
   echo "**** X-4 $EVENT_DIR"
   ls -l "${ACTION_DIR}/src/run-on-arch-commands.sh"
   cat "${ACTION_DIR}/src/run-on-arch-commands.sh"
+  echo "RUN:"
+echo   docker run \
+    --workdir "${GITHUB_WORKSPACE}" \
+    --rm \
+    -e DEBIAN_FRONTEND=noninteractive \
+    -e CI \
+    -e GITHUB_ACTION \
+    -e GITHUB_ACTION_PATH \
+    -e GITHUB_ACTIONS \
+    -e GITHUB_ACTOR \
+    -e GITHUB_API_URL \
+    -e GITHUB_BASE_REF \
+    -e GITHUB_ENV \
+    -e GITHUB_EVENT_NAME \
+    -e GITHUB_EVENT_PATH \
+    -e GITHUB_GRAPHQL_URL \
+    -e GITHUB_HEAD_REF \
+    -e GITHUB_JOB \
+    -e GITHUB_REF \
+    -e GITHUB_REPOSITORY \
+    -e GITHUB_RUN_ID \
+    -e GITHUB_RUN_NUMBER \
+    -e GITHUB_SERVER_URL \
+    -e GITHUB_SHA \
+    -e GITHUB_WORKFLOW \
+    -e GITHUB_WORKSPACE \
+    -e RUNNER_OS \
+    -e RUNNER_TEMP \
+    -e RUNNER_TOOL_CACHE \
+    -e RUNNER_WORKSPACE \
+    -v "/var/run/docker.sock:/var/run/docker.sock" \
+    -v "${EVENT_DIR}:${EVENT_DIR}" \
+    -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" \
+    -v "${ACTION_DIR}:${ACTION_DIR}" \
+    --tty \
+    ${DOCKER_RUN_ARGS[@]} \
+    "${CONTAINER_NAME}:latest" \
+    "${ACTION_DIR}/src/run-on-arch-commands.sh"
+
   echo "RUN ..."
   docker run \
     --workdir "${GITHUB_WORKSPACE}" \
