@@ -143,5 +143,8 @@ run_container () {
 quiet rm -f build-log.txt
 quiet install_deps
 
+echo "B-0"
 build_container
+echo "B-1"
 run_container
+echo "B-2"
