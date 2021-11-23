@@ -1,0 +1,41 @@
+#!/bin/bash
+
+for arch in amd64 s390x riscv64 ppc64le arm32v7 arm64v8 ; do
+   for ubuntu in 22.04 20.04 18.04 16.04 14.04 ; do
+      darch=`echo "${arch}" | sed -e "s/arm64v8/aarch64/"`
+      cat >Dockerfile.${darch}.ubuntu${ubuntu} <<EOF
+FROM ${arch}/ubuntu:${ubuntu}
+
+COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh
+RUN chmod +x /root/run-on-arch-install.sh && /root/run-on-arch-install.sh
+EOF
+
+   done
+done
+
+for arch in amd64 i386 s390x riscv64 ppc64le arm32v7 arm64v8 ; do
+   for debian in stretch jessie buster bullseye bookworm ; do
+      darch=`echo "${arch}" | sed -e "s/arm64v8/aarch64/"`
+      cat >Dockerfile.${darch}.${debian} <<EOF
+FROM ${arch}/debian:${debian}
+
+COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh
+RUN chmod +x /root/run-on-arch-install.sh && /root/run-on-arch-install.sh
+EOF
+
+   done
+done
+
+# Architectures for Fedora: https://hub.docker.com/_/fedora/
+for arch in amd64 arm32v7 arm64v8 ppc64le s390x ; do
+   for debian in 33 34 35 36 rawhide ; do
+      darch=`echo "${arch}" | sed -e "s/arm64v8/aarch64/"`
+      cat >Dockerfile.${darch}.${debian} <<EOF
+FROM ${arch}/fedora:${fedora}
+
+COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh
+RUN chmod +x /root/run-on-arch-install.sh && /root/run-on-arch-install.sh
+EOF
+
+   done
+done
