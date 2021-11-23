@@ -62,9 +62,10 @@ done
 
 # Architectures for Fedora: https://hub.docker.com/_/fedora/
 for arch in amd64 arm32v7 arm64v8 ppc64le s390x ; do
-   for debian in 33 34 35 36 rawhide ; do
+   for fedora in 33 34 35 36 rawhide latest ; do
       darch=`echo "${arch}" | sed -e "s/arm64v8/aarch64/"`
-      cat >Dockerfile.${darch}.${debian} <<EOF
+      dfedora=`echo "${fedora}" | sed -e "s/^latest/_latest/"`
+      cat >Dockerfile.${darch}.fedora${dfedora} <<EOF
 FROM ${arch}/fedora:${fedora}
 
 COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh
