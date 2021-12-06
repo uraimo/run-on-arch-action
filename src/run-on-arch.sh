@@ -138,5 +138,8 @@ run_container () {
 quiet rm -f build-log.txt
 quiet install_deps
 
+echo "::group::Build container"
 build_container
+
+echo "::group::Run container"
 run_container
