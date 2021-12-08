@@ -3,10 +3,11 @@
 set -euo pipefail
 
 # Args
-DOCKERFILE=$1
-CONTAINER_NAME=$2
+TARGET_ARCH=$1
+DOCKERFILE=$2
+CONTAINER_NAME=$3
 # Remainder of args get passed to docker
-declare -a DOCKER_RUN_ARGS=${@:3:${#@}}
+declare -a DOCKER_RUN_ARGS=${@:4:${#@}}
 
 # Defaults
 ACTION_DIR="$(cd "$(dirname "$0")"/.. >/dev/null 2>&1 ; pwd -P)"
@@ -47,8 +48,9 @@ build_container () {
   # cached between builds.
   if [[ -z "${GITHUB_TOKEN:-}" ]]
   then
-    docker build \
+    docker buildx build \
       "${ACTION_DIR}/Dockerfiles" \
+      --platform linux/$TARGET_ARCH \
       --file "$DOCKERFILE" \
       --tag "${CONTAINER_NAME}:latest"
   else
@@ -68,8 +70,9 @@ build_container () {
     set "$BASH_FLAGS"
 
     docker pull "$PACKAGE_REGISTRY:latest" || true
-    docker build \
+    docker buildx build \
       "${ACTION_DIR}/Dockerfiles" \
+      --platform linux/$TARGET_ARCH \
       --file "$DOCKERFILE" \
       --tag "${CONTAINER_NAME}:latest" \
       --cache-from="$PACKAGE_REGISTRY"
@@ -87,7 +90,8 @@ run_container () {
   # Interpolate DOCKER_RUN_ARGS, to support evaluation of $VAR references
   for i in "${!DOCKER_RUN_ARGS[@]}"
   do
-    DOCKER_RUN_ARGS[$i]=$(eval echo "${DOCKER_RUN_ARGS[$i]}")
+    # We have to do some ugly "magic" here to prevent flags from getting eaten
+    DOCKER_RUN_ARGS[$i]=$(eval echo _"${DOCKER_RUN_ARGS[$i]}" | sed s/^_//)
   done
 
   chmod +x "${ACTION_DIR}/src/run-on-arch-commands.sh"
@@ -97,6 +101,7 @@ run_container () {
 
   docker run \
     --workdir "${GITHUB_WORKSPACE}" \
+    --platform linux/$TARGET_ARCH \
     --rm \
     -e DEBIAN_FRONTEND=noninteractive \
     -e CI \
@@ -138,5 +143,9 @@ run_container () {
 quiet rm -f build-log.txt
 quiet install_deps
 
+echo "::group::Build Container"
 build_container
+echo "::endgroup::"
+echo "::group::Run Container"
 run_container
+echo "::endgroup::"

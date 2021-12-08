@@ -9,6 +9,19 @@ function slug(str) {
   return str.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
 }
 
+function docker_arch(qemu_arch) {
+  const matrix = {
+    'i386':    '386',
+    'x86_64':  'amd64',
+    'armv5':   'arm/v5',
+    'armv6':   'arm/v6',
+    'armv7':   'arm/v7',
+    'aarch64': 'arm64',
+  };
+  
+  return matrix[qemu_arch] || qemu_arch;
+}
+
 async function main() {
   if (process.platform !== 'linux') {
     throw new Error('run-on-arch supports only Linux')
@@ -101,7 +114,7 @@ async function main() {
   console.log('Configuring Docker for multi-architecture support')
   await exec(
     path.join(__dirname, 'run-on-arch.sh'),
-    [ dockerFile, containerName, ...dockerRunArgs ],
+    [ docker_arch(arch), dockerFile, containerName, ...dockerRunArgs ],
     { env },
   );
 }
