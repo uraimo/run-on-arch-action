@@ -9,7 +9,7 @@ function slug(str) {
   return str.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
 }
 
-function docker_arch(qemu_arch) {
+function dockerArch(qemuArch) {
   const matrix = {
     'i386':    '386',
     'x86_64':  'amd64',
@@ -19,7 +19,7 @@ function docker_arch(qemu_arch) {
     'aarch64': 'arm64',
   };
   
-  return matrix[qemu_arch] || qemu_arch;
+  return matrix[qemuArch] || qemuArch;
 }
 
 async function main() {
@@ -114,7 +114,7 @@ async function main() {
   console.log('Configuring Docker for multi-architecture support')
   await exec(
     path.join(__dirname, 'run-on-arch.sh'),
-    [ docker_arch(arch), dockerFile, containerName, ...dockerRunArgs ],
+    [ dockerArch(arch), dockerFile, containerName, ...dockerRunArgs ],
     { env },
   );
 }

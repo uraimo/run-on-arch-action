@@ -50,7 +50,7 @@ build_container () {
   then
     docker buildx build \
       "${ACTION_DIR}/Dockerfiles" \
-      --platform linux/$TARGET_ARCH \
+      --platform "linux/${TARGET_ARCH}" \
       --file "$DOCKERFILE" \
       --tag "${CONTAINER_NAME}:latest"
   else
@@ -72,7 +72,7 @@ build_container () {
     docker pull "$PACKAGE_REGISTRY:latest" || true
     docker buildx build \
       "${ACTION_DIR}/Dockerfiles" \
-      --platform linux/$TARGET_ARCH \
+      --platform "linux/${TARGET_ARCH}" \
       --file "$DOCKERFILE" \
       --tag "${CONTAINER_NAME}:latest" \
       --cache-from="$PACKAGE_REGISTRY"
@@ -101,7 +101,7 @@ run_container () {
 
   docker run \
     --workdir "${GITHUB_WORKSPACE}" \
-    --platform linux/$TARGET_ARCH \
+    --platform "linux/${TARGET_ARCH}" \
     --rm \
     -e DEBIAN_FRONTEND=noninteractive \
     -e CI \
