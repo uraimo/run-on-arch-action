@@ -47,7 +47,7 @@ done
 
 # Architectures for Debian: https://hub.docker.com/_/debian
 for arch in amd64 arm32v5 arm32v7 arm64v8 i386 mips64le ppc64le riscv64 s390x ; do
-   for debian in stretch jessie buster bullseye bookworm ; do
+   for debian in stretch jessie buster bullseye bookworm unstable ; do
       darch=`echo "${arch}" | sed -e "s/arm64v8/aarch64/"`
       cat >Dockerfile.${darch}.${debian} <<EOF
 FROM ${arch}/debian:${debian}
