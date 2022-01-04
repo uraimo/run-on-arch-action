@@ -35,7 +35,7 @@ jobs:
     name: Build on ubuntu-18.04 armv7
     steps:
       - uses: actions/checkout@v2.1.0
-      - uses: uraimo/run-on-arch-action@v2.0.5
+      - uses: uraimo/run-on-arch-action@v2.1.1
         name: Run commands
         id: runcmd
         with:
@@ -83,7 +83,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2.1.0
-      - uses: uraimo/run-on-arch-action@v2.0.5
+      - uses: uraimo/run-on-arch-action@v2.1.1
         name: Build artifact
         id: build
         with:
