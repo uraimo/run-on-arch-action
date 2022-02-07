@@ -2,7 +2,7 @@
 
 [![](https://github.com/uraimo/run-on-arch-action/workflows/test/badge.svg)](https://github.com/uraimo/run-on-arch-action)
 
-A GitHub Action that executes commands on non-x86 CPU architecture (armv6, armv7, aarch64, s390x, ppc64le).
+A GitHub Action that executes commands on non-x86 CPU architecture (armv6, armv7, aarch64, s390x, ppc64le) via QEMU.
 
 ## Usage
 
@@ -157,6 +157,10 @@ This table details the valid `arch`/`distro` combinations:
 
 
 Using an invalid `arch`/`distro` combination will fail.
+
+## Architecture emulation
+
+This project makes use of an additional QEMU container to be able to emulate via software architectures like ARM, s390x, ppc64le, etc... that are not natively supported by GitHub. You should keep this into consideration when reasoning about the expected running time of your jobs, there will be a visible impact on performance when compared to a job executed on a vanilla runner.
 
 ## Contributing
 
