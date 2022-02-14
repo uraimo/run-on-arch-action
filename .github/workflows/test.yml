@@ -90,7 +90,7 @@ jobs:
         # image layer.
         install: |
           case "${{ matrix.distro }}" in
-            ubuntu*|jessie|stretch|buster|bullseye|unstable|experimantal)
+            ubuntu*|jessie|stretch|buster|bullseye|unstable|experimental)
               apt-get update -q -y
               apt-get install -q -y git
               ;;
