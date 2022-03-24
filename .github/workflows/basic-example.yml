@@ -8,7 +8,7 @@ jobs:
     name: Build on ubuntu-18.04 armv7
     steps:
       - uses: actions/checkout@v2
-      - uses: ./ # If copying this example, change this to uraimo/run-on-arch-action@vX.Y.Z
+      - uses: uraimo/run-on-arch-action@v2
         name: Run commands
         id: runcmd
         with:
