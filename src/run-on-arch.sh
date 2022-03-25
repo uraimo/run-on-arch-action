@@ -98,6 +98,7 @@ run_container () {
   docker run \
     --workdir "${GITHUB_WORKSPACE}" \
     --rm \
+    --privileged=true \
     -e DEBIAN_FRONTEND=noninteractive \
     -e CI \
     -e GITHUB_ACTION \

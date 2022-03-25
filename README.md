@@ -8,7 +8,7 @@ A GitHub Action that executes commands on non-x86 CPU architecture (armv6, armv7
 
 This action requires three input parameters:
 
-* `arch`: CPU architecture: `armv6`, `armv7`, `aarch64`, `s390x`, or `ppc64le`. See [Supported Platforms](#supported-platforms) for the full matrix.
+* `arch`: CPU architecture: `armv6`, `armv7`, `aarch64`, `s390x`, `ppc64le`, `i386`, `amd64`, `mips64le`, or `riscv64`. See [Supported Platforms](#supported-platforms) for the full matrix.
 * `distro`: Linux distribution name: `ubuntu16.04`, `ubuntu18.04`, `ubuntu20.04`, `bullseye`, `buster`, `stretch`, `jessie`, `fedora_latest`, `alpine_latest` or `archarm_latest`. See [Supported Platforms](#supported-platforms) for the full matrix.
 * `run`: Shell commands to execute in the container.
 
@@ -154,6 +154,10 @@ This table details the valid `arch`/`distro` combinations:
 | aarch64  | stretch, buster, bullseye, ubuntu16.04, ubuntu18.04, ubuntu20.04, fedora_latest, alpine_latest, archarm_latest |
 | s390x    | jessie, stretch, buster, bullseye, ubuntu16.04, ubuntu18.04, ubuntu20.04, fedora_latest, alpine_latest |
 | ppc64le  | jessie, stretch, buster, bullseye, ubuntu16.04, ubuntu18.04,ubuntu20.04, fedora_latest, alpine_latest |
+| amd64    | buster, bullseye |
+| i386     | buster, bullseye, alpine_lastest |
+| mips64le | buster, bullseye |
+| riscv64  | unstable, experimental |
 
 
 Using an invalid `arch`/`distro` combination will fail.
@@ -165,6 +169,8 @@ This project makes use of an additional QEMU container to be able to emulate via
 ## Contributing
 
 New distros and archs can be added simply by creating a Dockerfile named `Dockerfile.{arch}.{distro}` (that targets an image for the desired combination) in the [Dockerfiles](https://github.com/uraimo/run-on-arch-action/blob/master/Dockerfiles) directory. Pull requests welcome!
+
+Note: If you're adding an i386 architecture distro, make sure that the Dockerfile contains `ENTRYPOINT ["linux32", "--"]`, otherwise uname will report incorrect architecture.
 
 ## Authors
 
