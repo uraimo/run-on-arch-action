@@ -10,7 +10,7 @@ inputs:
     required: false
     default: 'aarch64'
   distro:
-    description: 'Linux distribution name: ubuntu16.04, ubuntu18.04, ubuntu20.04, bullseye, buster, stretch, jessie, fedora_latest, alpine_latest, archarm_latest.'
+    description: 'Linux distribution name: ubuntu16.04, ubuntu18.04, ubuntu20.04, bookworm, bullseye, buster, stretch, jessie, fedora_latest, alpine_latest, archarm_latest.'
     required: false
     default: 'ubuntu18.04'
   githubToken:
