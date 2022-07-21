@@ -1,2 +1,5 @@
 # in nix world we always exact hash, not latest
 FROM niteo/nixpkgs-nixos-22.05:316b762afdb9e142a803f29c49a88b4a47db80ee
+
+COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh
+RUN chmod +x /root/run-on-arch-install.sh && /root/run-on-arch-install.sh
