@@ -151,9 +151,9 @@ This table details the valid `arch`/`distro` combinations:
 | -------- | ---------- |
 | armv6    | jessie, stretch, buster, bullseye, alpine_latest |
 | armv7    | jessie, stretch, buster, bullseye, ubuntu16.04, ubuntu18.04, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest, archarm_latest |
-| aarch64  | stretch, buster, bullseye, ubuntu16.04, ubuntu18.04, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest, archarm_latest |
-| s390x    | jessie, stretch, buster, bullseye, ubuntu16.04, ubuntu18.04, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest |
-| ppc64le  | jessie, stretch, buster, bullseye, ubuntu16.04, ubuntu18.04,ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest |
+| aarch64  | stretch, buster, bullseye, ubuntu16.04, ubuntu18.04, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest, archarm_latest, manylinux_2_24, manylinux_2_28 |
+| s390x    | jessie, stretch, buster, bullseye, ubuntu16.04, ubuntu18.04, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest, manylinux_2_24 |
+| ppc64le  | jessie, stretch, buster, bullseye, ubuntu16.04, ubuntu18.04,ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest, manylinux_2_24, manylinux_2_28 |
 
 
 Using an invalid `arch`/`distro` combination will fail.
