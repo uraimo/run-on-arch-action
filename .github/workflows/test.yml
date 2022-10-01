@@ -15,6 +15,8 @@ jobs:
             distro: archarm_latest
           - arch: aarch64
             distro: fedora_latest
+          - arch: i686
+            distro: ubuntu18.04
           - arch: ppc64le
             distro: alpine_latest
           - arch: x86_64
