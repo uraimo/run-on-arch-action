@@ -17,6 +17,8 @@ jobs:
             distro: fedora_latest
           - arch: ppc64le
             distro: alpine_latest
+          - arch: x86_64
+            distro: ubuntu_latest
           - arch: armv6
             distro: buster
           - arch: armv7
