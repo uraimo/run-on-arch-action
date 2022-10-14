@@ -41,5 +41,5 @@ inputs:
     default: ''
 
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'src/run-on-arch.js'
