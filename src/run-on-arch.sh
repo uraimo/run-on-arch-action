@@ -128,7 +128,6 @@ run_container () {
     -v "${EVENT_DIR}:${EVENT_DIR}" \
     -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" \
     -v "${ACTION_DIR}:${ACTION_DIR}" \
-    --tty \
     ${DOCKER_RUN_ARGS[@]} \
     "${CONTAINER_NAME}:latest" \
     "${ACTION_DIR}/src/run-on-arch-commands.sh"
