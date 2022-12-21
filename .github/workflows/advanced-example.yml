@@ -15,13 +15,15 @@ jobs:
             distro: ubuntu18.04
           - arch: ppc64le
             distro: alpine_latest
+          - arch: riscv64
+            distro: ubuntu_latest
           - arch: s390x
             distro: fedora_latest
           - arch: armv7
             distro: archarm_latest
 
     steps:
-      - uses: actions/checkout@v2.1.0
+      - uses: actions/checkout@v3
       - uses: ./ # If copying this example, change this to uraimo/run-on-arch-action@vX.Y.Z
         name: Build artifact
         id: build

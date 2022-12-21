@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-18.04
     name: Build on ubuntu-18.04 armv7
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: uraimo/run-on-arch-action@v2
         name: Run commands
         id: runcmd
