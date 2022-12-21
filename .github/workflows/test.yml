@@ -21,6 +21,8 @@ jobs:
             distro: buster
           - arch: armv7
             distro: jessie
+          - arch: riscv64
+            distro: ubuntu20.04
           - arch: s390x
             distro: stretch
           - arch: armv7

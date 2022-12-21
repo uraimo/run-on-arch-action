@@ -15,6 +15,8 @@ jobs:
             distro: ubuntu18.04
           - arch: ppc64le
             distro: alpine_latest
+          - arch: riscv64
+            distro: ubuntu_latest
           - arch: s390x
             distro: fedora_latest
           - arch: armv7
