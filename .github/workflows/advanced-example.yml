@@ -23,7 +23,7 @@ jobs:
             distro: archarm_latest
 
     steps:
-      - uses: actions/checkout@v2.1.0
+      - uses: actions/checkout@v3
       - uses: ./ # If copying this example, change this to uraimo/run-on-arch-action@vX.Y.Z
         name: Build artifact
         id: build

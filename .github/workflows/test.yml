@@ -22,6 +22,8 @@ jobs:
           - arch: armv7
             distro: jessie
           - arch: riscv64
+            distro: alpine_latest
+          - arch: riscv64
             distro: ubuntu20.04
           - arch: s390x
             distro: stretch
@@ -36,7 +38,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Build and run container
       id: build

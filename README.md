@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-18.04
     name: Build on ubuntu-18.04 armv7
     steps:
-      - uses: actions/checkout@v2.1.0
+      - uses: actions/checkout@v3
       - uses: uraimo/run-on-arch-action@v2
         name: Run commands
         id: runcmd
@@ -82,7 +82,7 @@ jobs:
             distro: fedora_latest
 
     steps:
-      - uses: actions/checkout@v2.1.0
+      - uses: actions/checkout@v3
       - uses: uraimo/run-on-arch-action@v2
         name: Build artifact
         id: build

@@ -7,7 +7,7 @@ jobs:
     name: A job to test the multi architecture actions
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Build
       uses: ./
       with:
