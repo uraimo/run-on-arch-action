@@ -62,11 +62,11 @@ jobs:
         setup: |
           distro_info=$(cat /etc/*-release | tr '[:upper:]' '[:lower:]' | tr '"' ' ' | tr '\n' ' ')
 
-          echo ::set-output name=host_arch::"$(uname -m)"
-          echo ::set-output name=host_distro_info::"$distro_info"
-          echo ::set-output name=host_env_arch::"$env_arch"
-          echo ::set-output name=host_env_distro::"$env_distro"
-          echo ::set-output name=host_shell_options::"$-"
+          echo "host_arch=$(uname -m)" >> $GITHUB_OUTPUT
+          echo "host_distro_info=$distro_info" >> $GITHUB_OUTPUT
+          echo "host_env_arch=$env_arch" >> $GITHUB_OUTPUT
+          echo "host_env_distro=$env_distro" >> $GITHUB_OUTPUT
+          echo "host_shell_options=$-" >> $GITHUB_OUTPUT
           
           # Setup volumes
           mkdir "${PWD}/volume_1"
@@ -107,18 +107,18 @@ jobs:
         run: |
           distro_info=$(cat /etc/*-release | tr '[:upper:]' '[:lower:]' | sed 's/"//g' | tr '\n' ';')
 
-          echo ::set-output name=arch::"$(uname -m)"
-          echo ::set-output name=distro_info::"$distro_info"
-          echo ::set-output name=shebang::"$(head -n 1 "$0")"
-          echo ::set-output name=env_arch::"$env_arch"
-          echo ::set-output name=env_distro::"$env_distro"
-          echo ::set-output name=volume_1_ls::"$(ls /volume_1 || true)"
-          echo ::set-output name=volume_2_ls::"$(ls /volume_2 || true)"
-          echo ::set-output name=volume_3_ls::"$(ls /volume_3 || true)"
-          echo ::set-output name=volume_4_ls::"$(ls /volume_4 || true)"
-          echo ::set-output name=volume_5_ls::"$(ls /volume_5 || true)"
-          echo ::set-output name=git_path::"$(which git)"
-          echo ::set-output name=shell_options::"$-"
+          echo "arch=$(uname -m)" >> $GITHUB_OUTPUT
+          echo "distro_info=$distro_info" >> $GITHUB_OUTPUT
+          echo "shebang=$$(head -n 1 "$0")" >> $GITHUB_OUTPUT
+          echo "env_arch=$env_arch" >> $GITHUB_OUTPUT
+          echo "env_distro=$env_distro" >> $GITHUB_OUTPUT
+          echo "volume_1_ls=$(ls /volume_1 || true)" >> $GITHUB_OUTPUT
+          echo "volume_2_ls=$(ls /volume_2 || true)" >> $GITHUB_OUTPUT
+          echo "volume_3_ls=$(ls /volume_3 || true)" >> $GITHUB_OUTPUT
+          echo "volume_4_ls=$(ls /volume_4 || true)" >> $GITHUB_OUTPUT
+          echo "volume_5_ls=$$(ls /volume_5 || true)" >> $GITHUB_OUTPUT
+          echo "git_path=$(which git)" >> $GITHUB_OUTPUT
+          echo "shell_options=$-" >> $GITHUB_OUTPUT
 
     - name: Assert setup script runs on host (check arch info)
       run: |
@@ -259,7 +259,7 @@ jobs:
         shell: /bin/dash
         run: |
           # Run on container
-          echo ::set-output name=shebang::$(head -n 1 "$0")
+          echo "shebang=$(head -n 1 "$0")" >> $GITHUB_OUTPUT
 
     - name: Assert container uses custom shell
       if: ${{ matrix.run_extra_tests }}

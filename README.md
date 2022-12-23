@@ -50,7 +50,7 @@ jobs:
           # Set an output parameter `uname` for use in subsequent steps
           run: |
             uname -a
-            echo ::set-output name=uname::$(uname -a)
+            echo "uname=$(uname -a)" >> $GITHUB_OUTPUT
 
       - name: Get the output
         # Echo the `uname` output parameter from the `runcmd` step
