@@ -1,9 +1,11 @@
-const core = require('@actions/core')
+/*jshint esversion: 9 */
+
+const core = require('@actions/core');
 const fs = require('fs');
-const path = require('path')
+const path = require('path');
 const YAML = require('yaml');
 const shlex = require('shlex');
-const { exec } = require('@actions/exec')
+const { exec } = require('@actions/exec');
 
 function slug(str) {
   return str.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
@@ -11,15 +13,27 @@ function slug(str) {
 
 async function main() {
   if (process.platform !== 'linux') {
-    throw new Error('run-on-arch supports only Linux')
+    throw new Error('run-on-arch supports only Linux');
   }
 
   const arch = core.getInput('arch', { required: true });
   const distro = core.getInput('distro', { required: true });
+  const base_image = core.getInput('base_image', { required: false });
 
   // If bad arch/distro passed, fail fast before installing all the qemu stuff
   const dockerFile = path.join(
     __dirname, '..', 'Dockerfiles', `Dockerfile.${arch}.${distro}`);
+
+  // If a custom base image is given, then dynamically create its Dockerfile.
+  if (base_image) {
+    let lines = [];
+    lines.push(`FROM ${base_image}`);
+    lines.push("COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh");
+    lines.push("RUN chmod +x /root/run-on-arch-install.sh && /root/run-on-arch-install.sh");
+    console.log(`Writing custom Dockerfile to: ${dockerFile} ...`);
+    fs.writeFileSync(dockerFile, lines.join("\n"));
+  }
+
   if (!fs.existsSync(dockerFile)) {
     throw new Error(`run-on-arch: ${dockerFile} does not exist.`);
   }
@@ -85,7 +99,7 @@ async function main() {
   // docker run.
   const envYAML = core.getInput('env');
   if (envYAML) {
-    const mapping = YAML.parse(envYAML)
+    const mapping = YAML.parse(envYAML);
     if (typeof mapping !== 'object' || mapping instanceof Array) {
       throw new Error(`run-on-arch: env must be a flat mapping of key/value pairs.`);
     }
@@ -105,7 +119,7 @@ async function main() {
     arch, distro,
   ].join('-'));
 
-  console.log('Configuring Docker for multi-architecture support')
+  console.log('Configuring Docker for multi-architecture support');
   await exec(
     path.join(__dirname, 'run-on-arch.sh'),
     [ dockerFile, containerName, ...dockerRunArgs ],
@@ -114,5 +128,5 @@ async function main() {
 }
 
 main().catch(err => {
-  core.setFailed(err.message)
-})
+  core.setFailed(err.message);
+});

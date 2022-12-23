@@ -85,8 +85,8 @@ jobs:
         install: |
           case "${{ matrix.distro }}" in
             ubuntu*|jessie|stretch|buster|bullseye)
-              apt-get update -q -y
-              apt-get install -q -y git
+              apt-get update -q -y --force-yes
+              apt-get install -q -y --force-yes git
               ;;
             fedora*)
               dnf -y update
