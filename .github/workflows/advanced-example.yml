@@ -78,6 +78,7 @@ jobs:
               archarm*)
                 pacman -Syyu --noconfirm
                 pacman -S git which --noconfirm
+                ;;
               none)
                 apt-get update -q -y
                 apt-get install -q -y git
