@@ -20,7 +20,7 @@ The action also accepts some optional input parameters:
 * `dockerRunArgs`: Additional arguments to pass to `docker run`, such as volume mappings. See [`docker run` documentation](https://docs.docker.com/engine/reference/commandline/run).
 * `setup`: Shell commands to execute on the host before running the container, such as creating directories for volume mappings.
 * `install`: Shell commands to execute in the container as part of `docker build`, such as installing dependencies. This speeds up subsequent builds if `githubToken` is also used, but note that the image layer will be publicly available in your projects GitHub Package Registry, so make sure the resulting image does not have any secrets cached in logs or state.
-* `base_image`: Specify a custom base image. This is optional. See the [advanced example](./.github/workflows/advanced-example.yml) in this repo.
+* `base_image`: Specify a custom base image, such as **busybox** or your predefined base image. This will replace the **FROM** claus in the default Dockerfile on the fly. This is optional. Hint: with this option you are able to use all the available archs other than the ones showed in this page. See the [advanced example](./.github/workflows/advanced-example.yml) in this repo. For more detials, see [PR #103](https://github.com/uraimo/run-on-arch-action/pull/103#issuecomment-1363810049).
 
 ### Basic example
 

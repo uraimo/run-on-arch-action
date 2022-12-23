@@ -40,7 +40,7 @@ inputs:
     required: false
     default: ''
   base_image:
-    description: 'Using the specific custom base image.'
+    description: 'Specify a custom base image, such as \"busybox\" or your predefined base image. This will replace the \"FROM\" claus in the default Dockerfile on the fly. This is optional. Hint: with this option you are able to use all the available archs other than the ones showed by default. See the [advanced example](./.github/workflows/advanced-example.yml) in this repo. For more detials, see [PR #103](https://github.com/uraimo/run-on-arch-action/pull/103#issuecomment-1363810049).'
     required: false
     default: ''
 
