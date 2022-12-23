@@ -1,13 +1,11 @@
 /*jshint esversion: 9 */
 
-const core = require('@actions/core')
+const core = require('@actions/core');
 const fs = require('fs');
-const path = require('path')
+const path = require('path');
 const YAML = require('yaml');
 const shlex = require('shlex');
-const {
-  exec
-} = require('@actions/exec')
+const { exec } = require('@actions/exec');
 
 function slug(str) {
   return str.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
@@ -15,18 +13,12 @@ function slug(str) {
 
 async function main() {
   if (process.platform !== 'linux') {
-    throw new Error('run-on-arch supports only Linux')
+    throw new Error('run-on-arch supports only Linux');
   }
 
-  const arch = core.getInput('arch', {
-    required: true
-  });
-  const distro = core.getInput('distro', {
-    required: true
-  });
-  const base_image = core.getInput('base_image', {
-    required: false
-  });
+  const arch = core.getInput('arch', { required: true });
+  const distro = core.getInput('distro', { required: true });
+  const base_image = core.getInput('base_image', { required: false });
 
   // If bad arch/distro passed, fail fast before installing all the qemu stuff
   const dockerFile = path.join(
@@ -83,9 +75,7 @@ async function main() {
 
   // Write container commands to a script file for running
   const commands = [
-    `#!${shell}`, 'set -eu;', core.getInput('run', {
-      required: true
-    }),
+    `#!${shell}`, 'set -eu;', core.getInput('run', { required: true }),
   ].join('\n');
   fs.writeFileSync(
     path.join(__dirname, 'run-on-arch-commands.sh'),
@@ -98,9 +88,7 @@ async function main() {
   const githubToken = core.getInput('githubToken');
 
   // Copy environment variables from parent process
-  const env = {
-    ...process.env
-  };
+  const env = { ...process.env };
 
   if (githubToken) {
     env.GITHUB_TOKEN = githubToken;
@@ -134,9 +122,8 @@ async function main() {
   console.log('Configuring Docker for multi-architecture support');
   await exec(
     path.join(__dirname, 'run-on-arch.sh'),
-    [dockerFile, containerName, ...dockerRunArgs], {
-      env
-    },
+    [ dockerFile, containerName, ...dockerRunArgs ],
+    { env },
   );
 }
 
