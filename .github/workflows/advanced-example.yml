@@ -59,6 +59,8 @@ jobs:
           # builds don't have to re-install them. The image layer is cached
           # publicly in your project's package repository, so it is vital that
           # no secrets are present in the container state or logs.
+          # In this workflow, the only none step using a base_image is Ubuntu, 
+          # so update apt without checking the acutal base_image value.
           install: |
             case "${{ matrix.distro }}" in
               ubuntu*|jessie|stretch|buster)
@@ -76,6 +78,9 @@ jobs:
               archarm*)
                 pacman -Syyu --noconfirm
                 pacman -S git which --noconfirm
+              none)
+                apt-get update -q -y
+                apt-get install -q -y git
             esac
 
           # Produce a binary artifact and place it in the mounted volume
