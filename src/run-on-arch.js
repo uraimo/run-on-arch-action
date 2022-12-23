@@ -20,6 +20,10 @@ async function main() {
   const distro = core.getInput('distro', { required: true });
   const base_image = core.getInput('base_image', { required: false });
 
+  if((arch==='none' || distro==='none') && !base_image){
+    throw new Error(`run-on-arch: If arch and distro are not specified, base_image is required.`);
+  }
+
   // If bad arch/distro passed, fail fast before installing all the qemu stuff
   const dockerFile = path.join(
     __dirname, '..', 'Dockerfiles', `Dockerfile.${arch}.${distro}`);
