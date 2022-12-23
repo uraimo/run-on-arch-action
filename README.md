@@ -20,6 +20,7 @@ The action also accepts some optional input parameters:
 * `dockerRunArgs`: Additional arguments to pass to `docker run`, such as volume mappings. See [`docker run` documentation](https://docs.docker.com/engine/reference/commandline/run).
 * `setup`: Shell commands to execute on the host before running the container, such as creating directories for volume mappings.
 * `install`: Shell commands to execute in the container as part of `docker build`, such as installing dependencies. This speeds up subsequent builds if `githubToken` is also used, but note that the image layer will be publicly available in your projects GitHub Package Registry, so make sure the resulting image does not have any secrets cached in logs or state.
+* `base_image`: Specify a custom base image. This is optional. See the [advanced example](./.github/workflows/advanced-example.yml) in this repo.
 
 ### Basic example
 
