@@ -32,6 +32,8 @@ jobs:
           --volume=${PWD}/volume_2:/volume_2
           "-v${PWD}/volume_3:/volume_3"
           -v "${PWD}/volume_4:/volume_4" -v "${PWD}/volume_5:/volume_5"
+          -v "`dirname $GITHUB_OUTPUT`:/github_output"
+          -e OUTPUTFILE="`basename $GITHUB_OUTPUT`"
 
         # Sourced on host, after container build, before container run
         setup: |
@@ -54,12 +56,14 @@ jobs:
         run: |
           distro_info=$(cat /etc/*-release | tr '[:upper:]' '[:lower:]' | sed 's/"//g' | tr '\n' ';')
 
-          echo "arch=$(uname -m)"
-          echo "distro_info=$distro_info"
-          echo "shebang=$(head -n 1 "$0")"
-          echo "env_arch=$env_arch"
-          echo "env_distro=$env_distro"
-          echo "shell_options=$-"
+          GITHUB_OUTPUT=/github_output/$OUTPUTFILE
+
+          echo "arch=$(uname -m)" >> $GITHUB_OUTPUT
+          echo "distro_info=$distro_info" >> $GITHUB_OUTPUT
+          echo "shebang=$(head -n 1 "$0")" >> $GITHUB_OUTPUT
+          echo "env_arch=$env_arch" >> $GITHUB_OUTPUT
+          echo "env_distro=$env_distro" >> $GITHUB_OUTPUT
+          echo "shell_options=$-" >> $GITHUB_OUTPUT
 
     - name: Assert container receives environment variables
       run: |

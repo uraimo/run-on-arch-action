@@ -55,16 +55,20 @@ jobs:
           --volume=${PWD}/volume_2:/volume_2
           "-v${PWD}/volume_3:/volume_3"
           -v "${PWD}/volume_4:/volume_4" -v "${PWD}/volume_5:/volume_5"
+          -v "`dirname $GITHUB_OUTPUT`:/github_output"
+          -e OUTPUTFILE="`basename $GITHUB_OUTPUT`"
 
         # Sourced on host, after container build, before container run
         setup: |
           distro_info=$(cat /etc/*-release | tr '[:upper:]' '[:lower:]' | tr '"' ' ' | tr '\n' ' ')
 
-          echo "host_arch=$(uname -m)"
-          echo "host_distro_info=$distro_info"
-          echo "host_env_arch=$env_arch"
-          echo "host_env_distro=$env_distro"
-          echo "host_shell_options=$-"
+          GITHUB_OUTPUT=`$GITHUB_OUTPUT`
+
+          echo "host_arch=$(uname -m)" >> $GITHUB_OUTPUT
+          echo "host_distro_info=$distro_info" >> $GITHUB_OUTPUT
+          echo "host_env_arch=$env_arch" >> $GITHUB_OUTPUT
+          echo "host_env_distro=$env_distro" >> $GITHUB_OUTPUT
+          echo "host_shell_options=$-" >> $GITHUB_OUPUT
           
           # Setup volumes
           mkdir "${PWD}/volume_1"
@@ -104,19 +108,21 @@ jobs:
         # Run on container
         run: |
           distro_info=$(cat /etc/*-release | tr '[:upper:]' '[:lower:]' | sed 's/"//g' | tr '\n' ';')
-
-          echo "arch=$(uname -m)"
-          echo "distro_info=$distro_info"
-          echo "shebang=$$(head -n 1 "$0")"
-          echo "env_arch=$env_arch"
-          echo "env_distro=$env_distro"
-          echo "volume_1_ls=$(ls /volume_1 || true)"
-          echo "volume_2_ls=$(ls /volume_2 || true)"
-          echo "volume_3_ls=$(ls /volume_3 || true)"
-          echo "volume_4_ls=$(ls /volume_4 || true)"
-          echo "volume_5_ls=$$(ls /volume_5 || true)"
-          echo "git_path=$(which git)"
-          echo "shell_options=$-"
+          
+          GITHUB_OUTPUT=/github_output/$OUTPUTFILE
+          
+          echo "arch=$(uname -m)" >> $GITHUB_OUTPUT
+          echo "distro_info=$distro_info" >> $GITHUB_OUTPUT
+          echo "shebang=$$(head -n 1 "$0")" >> $GITHUB_OUTPUT
+          echo "env_arch=$env_arch" >> $GITHUB_OUTPUT
+          echo "env_distro=$env_distro" >> $GITHUB_OUTPUT
+          echo "volume_1_ls=$(ls /volume_1 || true)" >> $GITHUB_OUTPUT
+          echo "volume_2_ls=$(ls /volume_2 || true)" >> $GITHUB_OUTPUT
+          echo "volume_3_ls=$(ls /volume_3 || true)" >> $GITHUB_OUTPUT
+          echo "volume_4_ls=$(ls /volume_4 || true)" >> $GITHUB_OUTPUT
+          echo "volume_5_ls=$$(ls /volume_5 || true)" >> $GITHUB_OUTPUT
+          echo "git_path=$(which git)" >> $GITHUB_OUTPUT
+          echo "shell_options=$-" >> $GITHUB_OUTPUT
 
     - name: Assert setup script runs on host (check arch info)
       run: |
@@ -255,9 +261,13 @@ jobs:
         arch: ${{ matrix.arch }}
         distro: ${{ matrix.distro }}
         shell: /bin/dash
+        dockerRunArgs: |
+          -v "`dirname $GITHUB_OUTPUT`:/github_output"
+          -e OUTPUTFILE="`basefile $GITHUB_OUTPUT`"
         run: |
           # Run on container
-          echo "shebang=$(head -n 1 "$0")"
+          GITHUB_OUTPUT=/github_output/$OUTPUTFILE
+          echo "shebang=$(head -n 1 "$0")" >> $GITHUB_OUTPUT
 
     - name: Assert container uses custom shell
       if: ${{ matrix.run_extra_tests }}
