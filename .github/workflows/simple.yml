@@ -37,11 +37,11 @@ jobs:
         setup: |
           distro_info=$(cat /etc/*-release | tr '[:upper:]' '[:lower:]' | tr '"' ' ' | tr '\n' ' ')
 
-          echo "host_arch=$(uname -m)" >> $GITHUB_OUTPUT
-          echo "host_distro_info=$distro_info" >> $GITHUB_OUTPUT
-          echo "host_env_arch=$env_arch" >> $GITHUB_OUTPUT
-          echo "host_env_distro=$env_distro" >> $GITHUB_OUTPUT
-          echo "host_shell_options=$-" >> $GITHUB_OUTPUT
+          echo "host_arch=$(uname -m)"
+          echo "host_distro_info=$distro_info"
+          echo "host_env_arch=$env_arch"
+          echo "host_env_distro=$env_distro"
+          echo "host_shell_options=$-"
           
           # List all qemu packages, including qemu-user-static platforms
           ls -al /usr/bin/qemu-*
@@ -54,12 +54,12 @@ jobs:
         run: |
           distro_info=$(cat /etc/*-release | tr '[:upper:]' '[:lower:]' | sed 's/"//g' | tr '\n' ';')
 
-          echo "arch=$(uname -m)" >> $GITHUB_OUTPUT
-          echo "distro_info=$distro_info" >> $GITHUB_OUTPUT
-          echo "shebang=$(head -n 1 "$0")" >> $GITHUB_OUTPUT
-          echo "env_arch=$env_arch" >> $GITHUB_OUTPUT
-          echo "env_distro=$env_distro" >> $GITHUB_OUTPUT
-          echo "shell_options=$-" >> $GITHUB_OUTPUT
+          echo "arch=$(uname -m)"
+          echo "distro_info=$distro_info"
+          echo "shebang=$(head -n 1 "$0")"
+          echo "env_arch=$env_arch"
+          echo "env_distro=$env_distro"
+          echo "shell_options=$-"
 
     - name: Assert container receives environment variables
       run: |
