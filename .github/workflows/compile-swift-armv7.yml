@@ -1,4 +1,4 @@
-name: Build with Swift on armv7
+name: Compile with Swift on armv7
 on: [push, pull_request]
 
 jobs:

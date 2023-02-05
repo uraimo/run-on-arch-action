@@ -1,4 +1,4 @@
-name: Unit Tests
+name: Unit Tests Matrix
 on: [push, pull_request]
 
 jobs:
@@ -61,9 +61,10 @@ jobs:
         # Sourced on host, after container build, before container run
         setup: |
           distro_info=$(cat /etc/*-release | tr '[:upper:]' '[:lower:]' | tr '"' ' ' | tr '\n' ' ')
+          
+          GITHUB_OUTPUT=`echo $GITHUB_OUTPUT`
 
-          GITHUB_OUTPUT=`$GITHUB_OUTPUT`
-
+          echo "Setting vars"
           echo "host_arch=$(uname -m)" >> $GITHUB_OUTPUT
           echo "host_distro_info=$distro_info" >> $GITHUB_OUTPUT
           echo "host_env_arch=$env_arch" >> $GITHUB_OUTPUT
