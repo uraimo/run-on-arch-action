@@ -44,9 +44,6 @@ jobs:
           echo "host_env_arch=$env_arch"
           echo "host_env_distro=$env_distro"
           echo "host_shell_options=$-"
-          
-          # List all qemu packages, including qemu-user-static platforms
-          ls -al /usr/bin/qemu-*
 
         install: |
               apt-get update -q -y

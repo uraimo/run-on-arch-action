@@ -31,12 +31,7 @@ quiet () {
   eval "$@" >> build-log.txt 2>&1 || show_build_log_and_exit $?
 }
 
-install_deps () {
-  # Install support for non-x86 emulation in Docker via QEMU.
-  # Platforms: linux/arm64, linux/riscv64, linux/ppc64le, linux/s390x,
-  #            linux/386, linux/arm/v7, linux/arm/v6
-  sudo apt-get update -q -y
-  sudo apt-get -qq install -y qemu qemu-user-static
+bootstrap_qemu_static () {
   docker run --rm --privileged multiarch/qemu-user-static --reset -p yes --credential yes
 }
 
@@ -135,7 +130,7 @@ run_container () {
 
 # Installing deps produces a lot of log noise, so we do so quietly
 quiet rm -f build-log.txt
-quiet install_deps
+quiet bootstrap_qemu_static
 
 echo "::group::Build container"
 build_container
