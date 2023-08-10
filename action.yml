@@ -15,7 +15,7 @@ inputs:
     default: 'ubuntu18.04'
   githubToken:
     description: 'Your GitHub token, used for caching Docker images in your project''s public package registry. Usually this would just be $\{{ github.token }}. This speeds up builds and is highly recommended.'
-    required: true
+    required: false
     default: ''
   env:
     description: 'Environment variables to propagate to the container. YAML, but must begin with a | character. These variables will be available in both run and setup.'
