@@ -32,10 +32,10 @@ on: [push, pull_request]
 jobs:
   armv7_job:
     # The host should always be Linux
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     name: Build on ubuntu-18.04 armv7
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: uraimo/run-on-arch-action@v2
         name: Run commands
         id: runcmd
@@ -68,7 +68,7 @@ on: [push, pull_request]
 jobs:
   build_job:
     # The host should always be linux
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     name: Build on ${{ matrix.distro }} ${{ matrix.arch }}
 
     # Run steps on a matrix of 4 arch/distro combinations
@@ -85,7 +85,7 @@ jobs:
             distro: none
             base_image: riscv64/busybox
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: uraimo/run-on-arch-action@v2
         name: Build artifact
         id: build
