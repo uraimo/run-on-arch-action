@@ -15,19 +15,25 @@ jobs:
             distro: ubuntu18.04
           - arch: ppc64le
             distro: alpine_latest
+          - arch: riscv64
+            distro: ubuntu_latest
           - arch: s390x
             distro: fedora_latest
           - arch: armv7
             distro: archarm_latest
+          - arch: none
+            distro: none
+            base_image: ubuntu:18.04
 
     steps:
-      - uses: actions/checkout@v2.1.0
+      - uses: actions/checkout@v3
       - uses: ./ # If copying this example, change this to uraimo/run-on-arch-action@vX.Y.Z
         name: Build artifact
         id: build
         with:
           arch: ${{ matrix.arch }}
           distro: ${{ matrix.distro }}
+          base_image: ${{ matrix.base_image }}
 
           # Not required, but speeds up builds
           githubToken: ${{ github.token }}
@@ -53,6 +59,8 @@ jobs:
           # builds don't have to re-install them. The image layer is cached
           # publicly in your project's package repository, so it is vital that
           # no secrets are present in the container state or logs.
+          # In this workflow, the only none step using a base_image is Ubuntu, 
+          # so update apt without checking the acutal base_image value.
           install: |
             case "${{ matrix.distro }}" in
               ubuntu*|jessie|stretch|buster)
@@ -70,6 +78,10 @@ jobs:
               archarm*)
                 pacman -Syyu --noconfirm
                 pacman -S git which --noconfirm
+                ;;
+              none)
+                apt-get update -q -y
+                apt-get install -q -y git
             esac
 
           # Produce a binary artifact and place it in the mounted volume

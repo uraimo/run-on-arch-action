@@ -2,13 +2,13 @@
 
 [![](https://github.com/uraimo/run-on-arch-action/workflows/test/badge.svg)](https://github.com/uraimo/run-on-arch-action)
 
-A GitHub Action that executes commands on non-x86 CPU architecture (armv6, armv7, aarch64, s390x, ppc64le).
+A GitHub Action that executes commands on non-x86 CPU architecture (armv6, armv7, aarch64, s390x, ppc64le) via QEMU.
 
 ## Usage
 
 This action requires three input parameters:
 
-* `arch`: CPU architecture: `armv6`, `armv7`, `aarch64`, `s390x`, or `ppc64le`. See [Supported Platforms](#supported-platforms) for the full matrix.
+* `arch`: CPU architecture: `armv6`, `armv7`, `aarch64`, `riscv64`, `s390x`, or `ppc64le`. See [Supported Platforms](#supported-platforms) for the full matrix.
 * `distro`: Linux distribution name: `ubuntu16.04`, `ubuntu18.04`, `ubuntu20.04`, `bullseye`, `buster`, `stretch`, `jessie`, `fedora_latest`, `alpine_latest` or `archarm_latest`. See [Supported Platforms](#supported-platforms) for the full matrix.
 * `run`: Shell commands to execute in the container.
 
@@ -20,6 +20,7 @@ The action also accepts some optional input parameters:
 * `dockerRunArgs`: Additional arguments to pass to `docker run`, such as volume mappings. See [`docker run` documentation](https://docs.docker.com/engine/reference/commandline/run).
 * `setup`: Shell commands to execute on the host before running the container, such as creating directories for volume mappings.
 * `install`: Shell commands to execute in the container as part of `docker build`, such as installing dependencies. This speeds up subsequent builds if `githubToken` is also used, but note that the image layer will be publicly available in your projects GitHub Package Registry, so make sure the resulting image does not have any secrets cached in logs or state.
+* `base_image`: Specify a custom base image, such as [busybox](https://hub.docker.com/_/busybox), `arch` and `distro` should be set to `none` in this case. This will allow you to chose direcly the image that will be used in the *FROM* clause of the internal docker container without needing to create a Dockerfile.arch.distro for a specific arch/distro pair. For more detials, see [PR #103](https://github.com/uraimo/run-on-arch-action/pull/103#issuecomment-1363810049). Known limitation: Only one base_image configuration for each workflow if you use GitHub images caching.
 
 ### Basic example
 
@@ -34,8 +35,8 @@ jobs:
     runs-on: ubuntu-18.04
     name: Build on ubuntu-18.04 armv7
     steps:
-      - uses: actions/checkout@v2.1.0
-      - uses: uraimo/run-on-arch-action@v2.0.5
+      - uses: actions/checkout@v3
+      - uses: uraimo/run-on-arch-action@v2
         name: Run commands
         id: runcmd
         with:
@@ -70,7 +71,7 @@ jobs:
     runs-on: ubuntu-18.04
     name: Build on ${{ matrix.distro }} ${{ matrix.arch }}
 
-    # Run steps on a matrix of 3 arch/distro combinations
+    # Run steps on a matrix of 4 arch/distro combinations
     strategy:
       matrix:
         include:
@@ -80,10 +81,12 @@ jobs:
             distro: alpine_latest
           - arch: s390x
             distro: fedora_latest
-
+          - arch: none
+            distro: none
+            base_image: riscv64/busybox
     steps:
-      - uses: actions/checkout@v2.1.0
-      - uses: uraimo/run-on-arch-action@v2.0.5
+      - uses: actions/checkout@v3
+      - uses: uraimo/run-on-arch-action@v2
         name: Build artifact
         id: build
         with:
@@ -150,13 +153,18 @@ This table details the valid `arch`/`distro` combinations:
 | arch     | distro     |
 | -------- | ---------- |
 | armv6    | jessie, stretch, buster, bullseye, alpine_latest |
-| armv7    | jessie, stretch, buster, bullseye, ubuntu16.04, ubuntu18.04, ubuntu20.04, fedora_latest, alpine_latest, archarm_latest |
-| aarch64  | stretch, buster, bullseye, ubuntu16.04, ubuntu18.04, ubuntu20.04, fedora_latest, alpine_latest, archarm_latest |
-| s390x    | jessie, stretch, buster, bullseye, ubuntu16.04, ubuntu18.04, ubuntu20.04, fedora_latest, alpine_latest |
-| ppc64le  | jessie, stretch, buster, bullseye, ubuntu16.04, ubuntu18.04,ubuntu20.04, fedora_latest, alpine_latest |
+| armv7    | jessie, stretch, buster, bullseye, ubuntu16.04, ubuntu18.04, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest, archarm_latest |
+| aarch64  | stretch, buster, bullseye, ubuntu16.04, ubuntu18.04, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest, archarm_latest |
+| riscv64  | ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, alpine_edge |
+| s390x    | jessie, stretch, buster, bullseye, ubuntu16.04, ubuntu18.04, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest |
+| ppc64le  | jessie, stretch, buster, bullseye, ubuntu16.04, ubuntu18.04,ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest |
 
 
 Using an invalid `arch`/`distro` combination will fail.
+
+## Architecture emulation
+
+This project makes use of an additional QEMU container to be able to emulate via software architectures like ARM, s390x, ppc64le, etc... that are not natively supported by GitHub. You should keep this into consideration when reasoning about the expected running time of your jobs, there will be a visible impact on performance when compared to a job executed on a vanilla runner.
 
 ## Contributing
 

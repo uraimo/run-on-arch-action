@@ -21,6 +21,10 @@ jobs:
             distro: buster
           - arch: armv7
             distro: jessie
+          - arch: riscv64
+            distro: alpine_edge
+          - arch: riscv64
+            distro: ubuntu20.04
           - arch: s390x
             distro: stretch
           - arch: armv7
@@ -34,7 +38,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Build and run container
       id: build
@@ -81,8 +85,8 @@ jobs:
         install: |
           case "${{ matrix.distro }}" in
             ubuntu*|jessie|stretch|buster|bullseye)
-              apt-get update -q -y
-              apt-get install -q -y git
+              apt-get update -q -y --force-yes
+              apt-get install -q -y --force-yes git
               ;;
             fedora*)
               dnf -y update
