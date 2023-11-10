@@ -32,7 +32,7 @@
 
 # Architectures for Ubuntu: https://hub.docker.com/_/ubuntu
 for arch in amd64 arm32v7 arm64v8 i386 ppc64le riscv64 s390x ; do
-   for ubuntu in 22.04 20.04 18.04 16.04 14.04 ; do
+   for ubuntu in 24.04 22.04 20.04 18.04 16.04 14.04 ; do
       darch=`echo "${arch}" | sed -e "s/arm64v8/aarch64/"`
       cat >Dockerfile.${darch}.ubuntu${ubuntu} <<EOF
 FROM ${arch}/ubuntu:${ubuntu}
@@ -47,7 +47,7 @@ done
 
 # Architectures for Debian: https://hub.docker.com/_/debian
 for arch in amd64 arm32v5 arm32v7 arm64v8 i386 mips64le ppc64le riscv64 s390x ; do
-   for debian in stretch jessie buster bullseye bookworm unstable ; do
+   for debian in stretch jessie buster bullseye bookworm trixie unstable ; do
       darch=`echo "${arch}" | sed -e "s/arm64v8/aarch64/"`
       cat >Dockerfile.${darch}.${debian} <<EOF
 FROM ${arch}/debian:${debian}
@@ -62,7 +62,7 @@ done
 
 # Architectures for Fedora: https://hub.docker.com/_/fedora/
 for arch in amd64 arm32v7 arm64v8 ppc64le s390x ; do
-   for fedora in 33 34 35 36 rawhide latest ; do
+   for fedora in 33 34 35 36 37 38 39 rawhide latest ; do
       darch=`echo "${arch}" | sed -e "s/arm64v8/aarch64/"`
       dfedora=`echo "${fedora}" | sed -e "s/^latest/_latest/"`
       cat >Dockerfile.${darch}.fedora${dfedora} <<EOF
