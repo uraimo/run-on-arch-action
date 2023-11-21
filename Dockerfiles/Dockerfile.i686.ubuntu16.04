@@ -1,0 +1,5 @@
+FROM i386/ubuntu:16.04
+
+COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh
+RUN chmod +x /root/run-on-arch-install.sh && /root/run-on-arch-install.sh
+ENTRYPOINT ["linux32", "--"]

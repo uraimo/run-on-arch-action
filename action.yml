@@ -6,7 +6,7 @@ description: 'Run commands in a Linux container with a specific CPU architecture
 author: 'Umberto Raimondi, Elijah Shaw-Rutschman'
 inputs:
   arch:
-    description: 'CPU architecture: armv6, armv7, aarch64, riscv64, s390x, ppc64le.'
+    description: 'CPU architecture: armv6, armv7, aarch64, i686, riscv64, s390x, ppc64le, x86_64.'
     required: false
     default: 'aarch64'
   distro:
