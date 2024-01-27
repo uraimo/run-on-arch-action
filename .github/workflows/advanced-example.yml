@@ -19,8 +19,6 @@ jobs:
             distro: ubuntu_latest
           - arch: s390x
             distro: fedora_latest
-          - arch: armv7
-            distro: archarm_latest
           - arch: none
             distro: none
             base_image: ubuntu:22.04
