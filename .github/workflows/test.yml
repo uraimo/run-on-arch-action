@@ -19,7 +19,7 @@ jobs:
             distro: bullseye  
           - arch: s390x
             distro: bullseye
-          - arch: armv7
+          - arch: aarch64
             distro: fedora_latest
           - arch: riscv64
             distro: alpine_edge
