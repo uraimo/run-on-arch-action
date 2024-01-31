@@ -8,7 +8,16 @@ const shlex = require('shlex');
 const { exec } = require('@actions/exec');
 
 function slug(str) {
-  return str.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+  // From https://docs.docker.com/engine/reference/commandline/tag/
+  //
+  // A tag name must be valid ASCII and may contain lowercase and uppercase letters, digits, underscores,
+  // periods and hyphens. A tag name may not start with a period or a hyphen and may contain a maximum
+  // of 128 characters.
+  //
+  // - Apparently, docker client on ubuntu does not adhere to the above in that it does not allow
+  //   uppercase. The specs clearly talk about lowercase for the repository (host) name but NOT
+  //   the tag name. Oh well.
+  return str.replace(/[^a-zA-Z0-9_\-\.]/g, '-').replace(/^[\.\-]+/, '').substring(0, 128).toLowerCase();
 }
 
 async function main() {
@@ -117,8 +126,9 @@ async function main() {
     });
   }
 
+  const override = core.getInput('cachedImageTag');
   // Generate a container name slug unique to this workflow
-  const containerName = slug([
+  const containerName = (override) ? slug(override) : slug([
     'run-on-arch', env.GITHUB_REPOSITORY, env.GITHUB_WORKFLOW,
     arch, distro,
   ].join('-'));
