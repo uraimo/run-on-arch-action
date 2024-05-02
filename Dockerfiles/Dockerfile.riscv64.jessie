@@ -1,0 +1,4 @@
+FROM riscv64/debian:jessie
+
+COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh
+RUN chmod +x /root/run-on-arch-install.sh && /root/run-on-arch-install.sh
