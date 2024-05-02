@@ -19,6 +19,7 @@ async function main() {
   const arch = core.getInput('arch', { required: true });
   const distro = core.getInput('distro', { required: true });
   const base_image = core.getInput('base_image', { required: false });
+  const qemu_static_image = core.getInput('qemu_static_image', { required: false });
 
   if((arch==='none' || distro==='none') && !base_image){
     throw new Error(`run-on-arch: If arch and distro are not specified, base_image is required.`);
@@ -126,7 +127,7 @@ async function main() {
   console.log('Configuring Docker for multi-architecture support');
   await exec(
     path.join(__dirname, 'run-on-arch.sh'),
-    [ dockerFile, containerName, ...dockerRunArgs ],
+    [ dockerFile, containerName, qemu_static_image, ...dockerRunArgs ],
     { env },
   );
 }
