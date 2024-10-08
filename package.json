@@ -1,11 +1,11 @@
 {
   "name": "run-on-arch",
-  "version": "2.0.7",
+  "version": "2.7.0",
   "description": "Multi architecture support for GitHub Actions",
   "author": "Umberto Raimondi, Elijah Shaw-Rutschman",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "@actions/core": "^1.2.6",
+    "@actions/core": "^1.9.1",
     "@actions/exec": "^1.0.1",
     "shlex": "^2.0.2",
     "yaml": "^1.10.0"

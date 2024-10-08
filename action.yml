@@ -6,7 +6,7 @@ description: 'Run commands in a Linux container with a specific CPU architecture
 author: 'Umberto Raimondi, Elijah Shaw-Rutschman'
 inputs:
   arch:
-    description: 'CPU architecture: armv6, armv7, aarch64, s390x, ppc64le.'
+    description: 'CPU architecture: armv6, armv7, aarch64, riscv64, s390x, ppc64le.'
     required: false
     default: 'aarch64'
   distro:
@@ -15,7 +15,7 @@ inputs:
     default: 'ubuntu18.04'
   githubToken:
     description: 'Your GitHub token, used for caching Docker images in your project''s public package registry. Usually this would just be $\{{ github.token }}. This speeds up builds and is highly recommended.'
-    required: true
+    required: false
     default: ''
   env:
     description: 'Environment variables to propagate to the container. YAML, but must begin with a | character. These variables will be available in both run and setup.'
@@ -39,7 +39,11 @@ inputs:
     description: 'Shell commands to execute in the container as part of docker build, such as installing dependencies. This speeds up subsequent builds if githubToken is also used, but note that the image layer will be publicly available in your projects GitHub Package Registry, so make sure the resulting image does not have any secrets cached in logs or state.'
     required: false
     default: ''
+  base_image:
+    description: 'Specify a custom base image, such as \"busybox\" or your predefined base image. This will replace the \"FROM\" claus in the default Dockerfile on the fly. This is optional. Hint: with this option you are able to use all the available archs other than the ones showed by default. See the [advanced example](./.github/workflows/advanced-example.yml) in this repo. For more detials, see [PR #103](https://github.com/uraimo/run-on-arch-action/pull/103#issuecomment-1363810049).'
+    required: false
+    default: ''
 
 runs:
-  using: 'node12'
+  using: 'node20'
   main: 'src/run-on-arch.js'
