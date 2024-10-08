@@ -37,7 +37,7 @@ function makeDockerfile ()
 
    if docker pull "${from}" ; then
       cat >"${file}" <<EOF
-FROM ${arch}/ubuntu:${ubuntu}
+FROM ${from}
 
 COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh
 RUN chmod +x /root/run-on-arch-install.sh && /root/run-on-arch-install.sh

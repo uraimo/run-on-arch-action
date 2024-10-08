@@ -1,4 +1,4 @@
-FROM arm32v5/ubuntu:14.04
+FROM arm32v5/debian:jessie
 
 COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh
 RUN chmod +x /root/run-on-arch-install.sh && /root/run-on-arch-install.sh

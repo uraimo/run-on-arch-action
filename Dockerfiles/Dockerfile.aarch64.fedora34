@@ -1,4 +1,4 @@
-FROM arm64v8/ubuntu:14.04
+FROM arm64v8/fedora:34
 
 COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh
 RUN chmod +x /root/run-on-arch-install.sh && /root/run-on-arch-install.sh
