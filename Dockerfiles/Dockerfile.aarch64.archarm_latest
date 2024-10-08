@@ -1,4 +1,0 @@
-FROM agners/archlinuxarm-arm64v8:latest
-
-COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh
-RUN chmod +x /root/run-on-arch-install.sh && /root/run-on-arch-install.sh

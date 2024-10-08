@@ -78,7 +78,7 @@ jobs:
           - arch: aarch64
             distro: ubuntu22.04
           - arch: aarch64
-            distro: bullseye 
+            distro: bullseye
           - arch: ppc64le
             distro: alpine_latest
           - arch: none
