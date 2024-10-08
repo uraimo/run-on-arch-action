@@ -1,4 +1,4 @@
-FROM ppc64le/fedora:37
+FROM ppc64le/ubuntu:14.04
 
 COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh
 RUN chmod +x /root/run-on-arch-install.sh && /root/run-on-arch-install.sh

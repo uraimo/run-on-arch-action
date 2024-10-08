@@ -1,4 +1,4 @@
-FROM arm64v8/debian:trixie
+FROM arm64v8/ubuntu:14.04
 
 COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh
 RUN chmod +x /root/run-on-arch-install.sh && /root/run-on-arch-install.sh

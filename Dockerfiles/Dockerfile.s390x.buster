@@ -1,4 +1,4 @@
-FROM s390x/debian:buster
+FROM s390x/ubuntu:14.04
 
 COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh
 RUN chmod +x /root/run-on-arch-install.sh && /root/run-on-arch-install.sh
