@@ -72,7 +72,8 @@ build_container () {
       "${ACTION_DIR}/Dockerfiles" \
       --file "$DOCKERFILE" \
       --tag "${CONTAINER_NAME}:latest" \
-      --cache-from="$PACKAGE_REGISTRY"
+      --cache-from="$PACKAGE_REGISTRY" \
+      --build-arg BUILDKIT_INLINE_CACHE=1
     docker tag "${CONTAINER_NAME}:latest" "$PACKAGE_REGISTRY" \
       && docker push "$PACKAGE_REGISTRY" || true
   fi

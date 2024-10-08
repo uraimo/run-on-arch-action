@@ -62,7 +62,7 @@ done
 
 # Architectures for Fedora: https://hub.docker.com/_/fedora/
 for arch in amd64 arm32v7 arm64v8 ppc64le s390x ; do
-   for fedora in 33 34 35 36 37 38 39 rawhide latest ; do
+   for fedora in 33 34 35 36 37 38 39 40 rawhide latest ; do
       darch=`echo "${arch}" | sed -e "s/arm64v8/aarch64/"`
       dfedora=`echo "${fedora}" | sed -e "s/^latest/_latest/"`
       cat >Dockerfile.${darch}.fedora${dfedora} <<EOF
