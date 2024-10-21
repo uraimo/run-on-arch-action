@@ -16,7 +16,7 @@ jobs:
           distro: ubuntu22.04
 
           # Not required, but speeds up builds
-          githubToken: ${{ github.token }}
+          #githubToken: ${{ github.token }}
 
           run: |
             uname -a

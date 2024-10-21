@@ -40,7 +40,7 @@ jobs:
       id: build
       uses: ./
       with:
-        githubToken: ${{ github.token }}
+        #githubToken: ${{ github.token }}
         arch: ${{ matrix.arch }}
         distro: ${{ matrix.distro }}
         env: |
