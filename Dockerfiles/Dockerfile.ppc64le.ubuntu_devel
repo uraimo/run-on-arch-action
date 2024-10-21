@@ -1,4 +1,4 @@
-FROM ppc64le/ubuntu:devel
+FROM --platform=linux/ppc64le ppc64le/ubuntu:devel
 
 COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh
 RUN chmod +x /root/run-on-arch-install.sh && /root/run-on-arch-install.sh

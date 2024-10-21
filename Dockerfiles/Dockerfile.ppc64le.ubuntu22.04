@@ -1,4 +1,4 @@
-FROM ppc64le/ubuntu:22.04
+FROM --platform=linux/ppc64le ppc64le/ubuntu:22.04
 
 COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh
 RUN chmod +x /root/run-on-arch-install.sh && /root/run-on-arch-install.sh
