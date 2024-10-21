@@ -1,4 +1,4 @@
-FROM riscv64/alpine:edge
+FROM  --platform=linux/riscv64 riscv64/alpine:edge
 
 COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh
 RUN chmod +x /root/run-on-arch-install.sh && /root/run-on-arch-install.sh
