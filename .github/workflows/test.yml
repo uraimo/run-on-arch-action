@@ -2,6 +2,31 @@ name: Unit Tests
 on: [push, pull_request]
 
 jobs:
+  testactions_cache:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        githubToken: [true, false]
+        githubActionsCache: [true, false]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and run container
+        id: build
+        uses: ./
+        with:
+          githubActionsCache: '${{ matrix.githubActionsCache }}'
+          githubToken: "${{ matrix.githubToken && github.token || '' }}"
+          arch: aarch64
+          distro: bullseye
+          run: |
+            echo "Ran successfully"
+
   testactions_job:
     runs-on: ubuntu-latest
     name: Test
