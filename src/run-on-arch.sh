@@ -43,9 +43,20 @@ install_deps () {
 build_container () {
   # Build the container image.
 
+  # If the GITHUB_ACTIONS_CACHE env var has a value, the container images will
+  # be cached between builds, as long as the ACTIONS_CACHE_URL and ACTIONS_RUNTIME_TOKEN env vars are also set.
+  if [[ -n "${GITHUB_ACTIONS_CACHE:-}" && -n "${ACTIONS_CACHE_URL:-}" && -n "${ACTIONS_RUNTIME_TOKEN}" ]]
+  then
+    docker buildx build \
+      "${ACTION_DIR}/Dockerfiles" \
+      --file "$DOCKERFILE" \
+      --tag "${CONTAINER_NAME}:latest" \
+      --load \
+      --cache-to type=gha,mode=max,ignore-error=true,scope="${CONTAINER_NAME}" \
+      --cache-from type=gha,mode=max,ignore-error=true,scope="${CONTAINER_NAME}"
   # If the GITHUB_TOKEN env var has a value, the container images will be
   # cached between builds.
-  if [[ -z "${GITHUB_TOKEN:-}" ]]
+  elif [[ -z "${GITHUB_TOKEN:-}" ]]
   then
     docker build \
       "${ACTION_DIR}/Dockerfiles" \
@@ -125,6 +136,8 @@ run_container () {
     -e RUNNER_TEMP \
     -e RUNNER_TOOL_CACHE \
     -e RUNNER_WORKSPACE \
+    -e ACTIONS_CACHE_URL \
+    -e ACTIONS_RUNTIME_TOKEN \
     -v "/var/run/docker.sock:/var/run/docker.sock" \
     -v "${EVENT_DIR}:${EVENT_DIR}" \
     -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" \
