@@ -20,7 +20,7 @@ The action also accepts some optional input parameters:
 * `dockerRunArgs`: Additional arguments to pass to `docker run`, such as volume mappings. See [`docker run` documentation](https://docs.docker.com/engine/reference/commandline/run).
 * `setup`: Shell commands to execute on the host before running the container, such as creating directories for volume mappings.
 * `install`: Shell commands to execute in the container as part of `docker build`, such as installing dependencies. This speeds up subsequent builds if `githubToken` is also used, but note that the image layer will be publicly available in your projects GitHub Package Registry, so make sure the resulting image does not have any secrets cached in logs or state.
-* `base_image`: Specify a custom base image, such as [busybox](https://hub.docker.com/_/busybox), `arch` and `distro` should be set to `none` in this case. This will allow you to chose direcly the image that will be used in the *FROM* clause of the internal docker container without needing to create a Dockerfile.arch.distro for a specific arch/distro pair. For more detials, see [PR #103](https://github.com/uraimo/run-on-arch-action/pull/103#issuecomment-1363810049). Known limitation: Only one base_image configuration for each workflow if you use GitHub images caching.
+* `base_image`: Specify a custom base image, `arch` and `distro` should be set to `none` in this case. This will allow you to choose direcly the image that will be used in the *FROM* clause of the internal docker container without needing to create a Dockerfile.arch.distro for a specific arch/distro pair. If required by the docker image, the architecture can be specified prepenging the platform identifier before the image name, e.g. `--platform=linux/armv7 arm32v7/debian:buster`. Known limitation: Only one base_image configuration for each workflow if you use GitHub images caching.
 
 ### Basic example
 
@@ -83,7 +83,7 @@ jobs:
             distro: alpine_latest
           - arch: none
             distro: none
-            base_image: riscv64/busybox
+            base_image: --platform=linux/riscv64 riscv64/busybox
     steps:
       - uses: actions/checkout@v4
       - uses: uraimo/run-on-arch-action@v2
