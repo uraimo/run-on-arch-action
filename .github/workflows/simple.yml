@@ -43,10 +43,6 @@ jobs:
           echo ::set-output name=host_env_distro::"$env_distro"
           echo ::set-output name=host_shell_options::"$-"
           
-          # List all qemu packages, including qemu-user-static platforms
-          QEMULOCATION=$(dirname `which qemu-system-x86_64`) ; ls $QEMULOCATION/qemu-*
-          qemu-system-x86_64 -version
-
         install: |
               apt-get update -q -y
               apt-get install -q -y git
