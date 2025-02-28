@@ -138,7 +138,7 @@ run_container () {
 
 # Installing deps produces a lot of log noise, so we do so quietly
 quiet rm -f build-log.txt
-install_deps
+quiet install_deps
 
 echo "::group::Build container"
 build_container
