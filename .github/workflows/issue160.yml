@@ -1,5 +1,8 @@
 name: Test for issue 160
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
 
 permissions:
   contents: read
@@ -9,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-      - uses: uraimo/run-on-arch-action@feature-qemuinfo
+      - uses: uraimo/run-on-arch-action@master
         name: Test
         id: runcmd
         with:
