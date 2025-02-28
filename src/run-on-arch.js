@@ -90,12 +90,16 @@ async function main() {
   const dockerRunArgs = shlex.split(core.getInput('dockerRunArgs'));
 
   const githubToken = core.getInput('githubToken');
+  const githubActionsCache = core.getBooleanInput('githubActionsCache');
 
   // Copy environment variables from parent process
   const env = { ...process.env };
 
   if (githubToken) {
     env.GITHUB_TOKEN = githubToken;
+  }
+  if (githubActionsCache) {
+    env.GITHUB_ACTIONS_CACHE = githubActionsCache;
   }
 
   // Parse YAML and for environment variables.
