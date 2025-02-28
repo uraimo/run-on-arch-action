@@ -142,6 +142,10 @@ quiet install_deps
 
 echo "::group::Build container"
 build_container
+echo "::endgroup::"
 
 echo "::group::Run container"
 run_container
+echo "::endgroup::"
+
+
