@@ -1,6 +1,11 @@
+> [!NOTE] New major release addressing sporadic segmentation faults
+> 
+> The release 3.0.0 addressed sporadic segmentation faults noticed with recent kernel releases, please update your action to this new major release if you start noticing random or systematic CI failures.
+
 # Run-On-Arch GitHub Action
 
 [![](https://github.com/uraimo/run-on-arch-action/workflows/test/badge.svg)](https://github.com/uraimo/run-on-arch-action)
+
 
 A GitHub Action that executes commands on non-x86 CPU architecture (armv6, armv7, aarch64, s390x, ppc64le) via QEMU.
 
@@ -36,7 +41,7 @@ jobs:
     name: Build on ubuntu-22.04 armv7
     steps:
       - uses: actions/checkout@v4
-      - uses: uraimo/run-on-arch-action@v2
+      - uses: uraimo/run-on-arch-action@v3
         name: Run commands
         id: runcmd
         with:
@@ -86,7 +91,7 @@ jobs:
             base_image: --platform=linux/riscv64 riscv64/busybox
     steps:
       - uses: actions/checkout@v4
-      - uses: uraimo/run-on-arch-action@v2
+      - uses: uraimo/run-on-arch-action@v3
         name: Build artifact
         id: build
         with:
