@@ -1,6 +1,7 @@
-> [!NOTE] New major release addressing sporadic segmentation faults
+> [!NOTE]
+> **New major release addressing sporadic segmentation faults**
 > 
-> The release 3.0.0 addressed sporadic segmentation faults noticed with recent kernel releases, please update your action to this new major release if you start noticing random or systematic CI failures.
+> The release 3.0.0 addresses sporadic segmentation faults noticed with recent kernel releases, please update your action to this new major release (e.g. @v3) if you start noticing random or systematic CI failures.
 
 # Run-On-Arch GitHub Action
 
