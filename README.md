@@ -89,7 +89,7 @@ jobs:
             distro: alpine_latest
           - arch: none
             distro: none
-            base_image: --platform=linux/riscv64 riscv64/busybox
+            base_image: --platform=linux/riscv64 riscv64/ubuntu:22.04
     steps:
       - uses: actions/checkout@v4
       - uses: uraimo/run-on-arch-action@v3
