@@ -24,6 +24,9 @@ jobs:
           - arch: none
             distro: none
             base_image: ubuntu:22.04
+          - arch: none
+            distro: none
+            base_image: --platform=linux/riscv64 riscv64/ubuntu:22.04
 
     steps:
       - uses: actions/checkout@v3
