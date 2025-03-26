@@ -98,6 +98,7 @@ jobs:
         with:
           arch: ${{ matrix.arch }}
           distro: ${{ matrix.distro }}
+          base_image: ${{ matrix.base_image }}
 
           # Not required, but speeds up builds
           githubToken: ${{ github.token }}
