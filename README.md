@@ -160,11 +160,11 @@ This table details the valid `arch`/`distro` combinations:
 | arch     | distro     |
 | -------- | ---------- |
 | armv6    | stretch, buster, bullseye, bookworm, alpine_latest |
-| armv7    | stretch, buster, bullseye, bookworm, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest, archarm_latest |
-| aarch64  | stretch, buster, bullseye, bookworm, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest, archarm_latest |
+| armv7    | stretch, buster, bullseye, bookworm, trixie, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest, archarm_latest |
+| aarch64  | stretch, buster, bullseye, bookworm, trixie, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest, archarm_latest |
 | riscv64  | ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, alpine_edge |
-| s390x    | stretch, buster, bullseye, bookworm, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, alpine_latest |
-| ppc64le  | stretch, buster, bullseye, bookworm, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, alpine_latest |
+| s390x    | stretch, buster, bullseye, bookworm, trixie, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, alpine_latest |
+| ppc64le  | stretch, buster, bullseye, bookworm, trixie, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, alpine_latest |
 
 
 Using an invalid `arch`/`distro` combination will fail.
