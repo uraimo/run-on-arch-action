@@ -4,7 +4,7 @@ on: [push, pull_request]
 jobs:
   build_job:
     # The host should always be linux
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Build on ${{ matrix.distro }} ${{ matrix.arch }}
 
     # Run steps on a matrix of 4 arch/distro combinations
@@ -12,7 +12,7 @@ jobs:
       matrix:
         include:
           - arch: aarch64
-            distro: ubuntu22.04
+            distro: ubuntu24.04
           - arch: ppc64le
             distro: alpine_latest
           - arch: riscv64
@@ -23,10 +23,10 @@ jobs:
             distro: bullseye
           - arch: none
             distro: none
-            base_image: ubuntu:22.04
+            base_image: ubuntu:24.04
           - arch: none
             distro: none
-            base_image: --platform=linux/riscv64 riscv64/ubuntu:22.04
+            base_image: --platform=linux/riscv64 riscv64/ubuntu:24.04
 
     steps:
       - uses: actions/checkout@v3
