@@ -15,7 +15,7 @@ A GitHub Action that executes commands on non-x86 CPU architecture (armv6, armv7
 This action requires three input parameters:
 
 * `arch`: CPU architecture: `armv6`, `armv7`, `aarch64`, `riscv64`, `s390x`, or `ppc64le`. See [Supported Platforms](#supported-platforms) for the full matrix.
-* `distro`: Linux distribution name: `ubuntu22.04`,`ubuntu20.04`, `bookworm`,`bullseye`, `buster`, `stretch`,  `fedora_latest`, `alpine_latest` or `archarm_latest`. See [Supported Platforms](#supported-platforms) for the full matrix.
+* `distro`: Linux distribution name: `ubuntu24.04`,`ubuntu22.04`,`ubuntu20.04`, `bookworm`,`bullseye`, `buster`, `stretch`,  `fedora_latest`, `alpine_latest` or `archarm_latest`. See [Supported Platforms](#supported-platforms) for the full matrix.
 * `run`: Shell commands to execute in the container.
 
 The action also accepts some optional input parameters:
@@ -38,8 +38,8 @@ on: [push, pull_request]
 jobs:
   armv7_job:
     # The host should always be Linux
-    runs-on: ubuntu-22.04
-    name: Build on ubuntu-22.04 armv7
+    runs-on: ubuntu-24.04
+    name: Build on ubuntu-24.04 armv7
     steps:
       - uses: actions/checkout@v4
       - uses: uraimo/run-on-arch-action@v3
@@ -47,7 +47,7 @@ jobs:
         id: runcmd
         with:
           arch: armv7
-          distro: ubuntu22.04
+          distro: ubuntu24.04
 
           # Not required, but speeds up builds by storing container images in
           # a GitHub package registry.
@@ -74,7 +74,7 @@ on: [push, pull_request]
 jobs:
   build_job:
     # The host should always be linux
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Build on ${{ matrix.distro }} ${{ matrix.arch }}
 
     # Run steps on a matrix of 4 arch/distro combinations
@@ -82,14 +82,14 @@ jobs:
       matrix:
         include:
           - arch: aarch64
-            distro: ubuntu22.04
+            distro: ubuntu24.04
           - arch: aarch64
             distro: bullseye 
           - arch: ppc64le
             distro: alpine_latest
           - arch: none
             distro: none
-            base_image: --platform=linux/riscv64 riscv64/ubuntu:22.04
+            base_image: --platform=linux/riscv64 riscv64/ubuntu:24.04
     steps:
       - uses: actions/checkout@v4
       - uses: uraimo/run-on-arch-action@v3
@@ -160,11 +160,11 @@ This table details the valid `arch`/`distro` combinations:
 | arch     | distro     |
 | -------- | ---------- |
 | armv6    | stretch, buster, bullseye, bookworm, alpine_latest |
-| armv7    | stretch, buster, bullseye, bookworm, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest, archarm_latest |
-| aarch64  | stretch, buster, bullseye, bookworm, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest, archarm_latest |
-| riscv64  | ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, alpine_edge |
-| s390x    | stretch, buster, bullseye, bookworm, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, alpine_latest |
-| ppc64le  | stretch, buster, bullseye, bookworm, ubuntu20.04, ubuntu22.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, alpine_latest |
+| armv7    | stretch, buster, bullseye, bookworm, ubuntu20.04, ubuntu22.04 ubuntu24.04,, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest, archarm_latest |
+| aarch64  | stretch, buster, bullseye, bookworm, ubuntu20.04, ubuntu22.04, ubuntu24.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest, archarm_latest |
+| riscv64  | ubuntu20.04, ubuntu22.04, ubuntu24.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, alpine_edge |
+| s390x    | stretch, buster, bullseye, bookworm, ubuntu20.04, ubuntu22.04, ubuntu24.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, alpine_latest |
+| ppc64le  | stretch, buster, bullseye, bookworm, ubuntu20.04, ubuntu22.04, ubuntu24.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, alpine_latest |
 
 
 Using an invalid `arch`/`distro` combination will fail.
