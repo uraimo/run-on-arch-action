@@ -120,7 +120,7 @@ async function main() {
   // Generate a container name slug unique to this workflow
   const containerName = slug([
     'run-on-arch', env.GITHUB_REPOSITORY, env.GITHUB_WORKFLOW,
-    arch, distro,
+    env.GITHUB_JOB, arch, distro,
   ].join('-'));
 
   console.log('Configuring Docker for multi-architecture support');
