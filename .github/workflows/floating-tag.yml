@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Update floating tag
     steps:
-      - uses: actions/checkout@v3
-      - uses: fregante/setup-git-user@v1
+      - uses: actions/checkout@v4
+      - uses: fregante/setup-git-user@v2
       - name: Tag and push
         run: |
           # Parse tag name, e.g. "v2" from "refs/tags/v2.22.12"
