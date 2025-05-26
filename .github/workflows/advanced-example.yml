@@ -29,7 +29,7 @@ jobs:
             base_image: --platform=linux/riscv64 riscv64/ubuntu:24.04
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./ # If copying this example, change this to uraimo/run-on-arch-action@vX.Y.Z
         name: Build artifact
         id: build
