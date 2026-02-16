@@ -20,7 +20,7 @@ This action requires three input parameters:
 
 The action also accepts some optional input parameters:
 
-* `githubToken`: Your GitHub token, used for caching Docker images in your project's public package registry. Usually this would just be `${{ github.token }}`. This speeds up subsequent builds and is highly recommended.
+* `githubToken`: Your [GitHub token](https://docs.github.com/en/actions/security-guides/automatic-token-authentication), used for caching Docker images in your project's public package registry. Usually this would just be `${{ github.token }}`. This speeds up subsequent builds and is highly recommended.
 * `env`: Environment variables to propagate to the container. YAML, but must begin with a `|` character. These variables will be available in both run and setup.
 * `shell`: The shell to run commands with in the container. Default: `/bin/sh` on Alpine, `/bin/bash` for other distros.
 * `dockerRunArgs`: Additional arguments to pass to `docker run`, such as volume mappings. See [`docker run` documentation](https://docs.docker.com/engine/reference/commandline/run).
