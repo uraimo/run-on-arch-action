@@ -117,10 +117,15 @@ async function main() {
     });
   }
 
+  let cacheTag = core.getInput('cacheTag');
+  if (!cacheTag) {
+    cacheTag = 'default'
+  }
+
   // Generate a container name slug unique to this workflow
   const containerName = slug([
     'run-on-arch', env.GITHUB_REPOSITORY, env.GITHUB_WORKFLOW,
-    arch, distro,
+    arch, distro, cacheTag,
   ].join('-'));
 
   console.log('Configuring Docker for multi-architecture support');
