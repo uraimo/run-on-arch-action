@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-22.04
     name: Build on ubuntu-22.04 armv7
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: uraimo/run-on-arch-action@master
         name: Run commands
         id: runcmd
