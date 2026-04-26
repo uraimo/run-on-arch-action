@@ -66,7 +66,7 @@ jobs:
           # so update apt without checking the acutal base_image value.
           install: |
             case "${{ matrix.distro }}" in
-              ubuntu*|jessie|stretch|buster|bullseye|bookworm)
+              ubuntu*|jessie|stretch|buster|bullseye|bookworm|trixie)
                 apt-get update -q -y
                 apt-get install -q -y git
                 ;;
