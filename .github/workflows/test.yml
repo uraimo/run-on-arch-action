@@ -18,7 +18,7 @@ jobs:
           - arch: aarch64
             distro: bullseye  
           - arch: s390x
-            distro: bullseye
+            distro: trixie
           - arch: aarch64
             distro: fedora_latest
           - arch: riscv64

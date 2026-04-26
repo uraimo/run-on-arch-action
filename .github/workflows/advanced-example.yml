@@ -20,7 +20,7 @@ jobs:
           - arch: aarch64
             distro: fedora_latest
           - arch: s390x
-            distro: bullseye
+            distro: trixie
           - arch: none
             distro: none
             base_image: ubuntu:24.04
