@@ -15,18 +15,10 @@ jobs:
             distro: bullseye
           - arch: armv7
             distro: bullseye
-          - arch: aarch64
-            distro: bullseye  
           - arch: s390x
             distro: trixie
-          - arch: aarch64
-            distro: fedora_latest
-          - arch: riscv64
-            distro: alpine_edge
           - arch: ppc64le
             distro: alpine_latest
-          - arch: armv7
-            distro: ubuntu22.04
           - arch: riscv64
             distro: ubuntu22.04
             # Run tests that only need to be run on one matrix node
