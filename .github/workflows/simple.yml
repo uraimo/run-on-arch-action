@@ -37,11 +37,11 @@ jobs:
         setup: |
           distro_info=$(cat /etc/*-release | tr '[:upper:]' '[:lower:]' | tr '"' ' ' | tr '\n' ' ')
 
-          echo ::set-output name=host_arch::"$(uname -m)"
-          echo ::set-output name=host_distro_info::"$distro_info"
-          echo ::set-output name=host_env_arch::"$env_arch"
-          echo ::set-output name=host_env_distro::"$env_distro"
-          echo ::set-output name=host_shell_options::"$-"
+          printf 'host_arch=%s\n' "$(uname -m)" >> "$GITHUB_OUTPUT"
+          printf 'host_distro_info=%s\n' "$distro_info" >> "$GITHUB_OUTPUT"
+          printf 'host_env_arch=%s\n' "$env_arch" >> "$GITHUB_OUTPUT"
+          printf 'host_env_distro=%s\n' "$env_distro" >> "$GITHUB_OUTPUT"
+          printf 'host_shell_options=%s\n' "$-" >> "$GITHUB_OUTPUT"
           
         install: |
               apt-get update -q -y
@@ -51,12 +51,12 @@ jobs:
         run: |
           distro_info=$(cat /etc/*-release | tr '[:upper:]' '[:lower:]' | sed 's/"//g' | tr '\n' ';')
 
-          echo ::set-output name=arch::"$(uname -m)"
-          echo ::set-output name=distro_info::"$distro_info"
-          echo ::set-output name=shebang::"$(head -n 1 "$0")"
-          echo ::set-output name=env_arch::"$env_arch"
-          echo ::set-output name=env_distro::"$env_distro"
-          echo ::set-output name=shell_options::"$-"
+          printf 'arch=%s\n' "$(uname -m)" >> "$GITHUB_OUTPUT"
+          printf 'distro_info=%s\n' "$distro_info" >> "$GITHUB_OUTPUT"
+          printf 'shebang=%s\n' "$(head -n 1 "$0")" >> "$GITHUB_OUTPUT"
+          printf 'env_arch=%s\n' "$env_arch" >> "$GITHUB_OUTPUT"
+          printf 'env_distro=%s\n' "$env_distro" >> "$GITHUB_OUTPUT"
+          printf 'shell_options=%s\n' "$-" >> "$GITHUB_OUTPUT"
 
     - name: Assert container receives environment variables
       run: |

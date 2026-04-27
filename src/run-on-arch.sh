@@ -97,6 +97,17 @@ run_container () {
   # The location of the event.json file
   EVENT_DIR=$(dirname "$GITHUB_EVENT_PATH")
 
+  FILE_COMMAND_ARGS=()
+  for file_command in GITHUB_OUTPUT GITHUB_ENV GITHUB_PATH GITHUB_STEP_SUMMARY GITHUB_STATE
+  do
+    file_command_path="${!file_command:-}"
+    if [[ -n "$file_command_path" ]]
+    then
+      FILE_COMMAND_ARGS+=( -e "$file_command" )
+      FILE_COMMAND_ARGS+=( -v "$file_command_path:$file_command_path" )
+    fi
+  done
+
   docker run \
     --workdir "${GITHUB_WORKSPACE}" \
     --rm \
@@ -108,7 +119,6 @@ run_container () {
     -e GITHUB_ACTOR \
     -e GITHUB_API_URL \
     -e GITHUB_BASE_REF \
-    -e GITHUB_ENV \
     -e GITHUB_EVENT_NAME \
     -e GITHUB_EVENT_PATH \
     -e GITHUB_GRAPHQL_URL \
@@ -126,6 +136,7 @@ run_container () {
     -e RUNNER_TEMP \
     -e RUNNER_TOOL_CACHE \
     -e RUNNER_WORKSPACE \
+    "${FILE_COMMAND_ARGS[@]}" \
     -v "/var/run/docker.sock:/var/run/docker.sock" \
     -v "${EVENT_DIR}:${EVENT_DIR}" \
     -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" \
