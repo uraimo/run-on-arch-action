@@ -126,7 +126,7 @@ async function main() {
   console.log('Configuring Docker for multi-architecture support');
   await exec(
     path.join(__dirname, 'run-on-arch.sh'),
-    [ dockerFile, containerName, ...dockerRunArgs ],
+    [ dockerFile, containerName, arch, ...dockerRunArgs ],
     { env },
   );
 }
