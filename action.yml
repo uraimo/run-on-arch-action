@@ -2,11 +2,11 @@ name: 'Run on architecture'
 branding:
   icon: 'cpu'
   color: 'green'
-description: 'Run commands in a Linux container with a specific CPU architecture (armv6, armv7, aarch64, s390x, ppc64le)'
+description: 'Run commands in a Linux container with a specific CPU architecture (armv6, armv7, aarch64, loongarch64, s390x, ppc64le)'
 author: 'Umberto Raimondi, Elijah Shaw-Rutschman'
 inputs:
   arch:
-    description: 'CPU architecture: armv6, armv7, aarch64, riscv64, s390x, ppc64le.'
+    description: 'CPU architecture: armv6, armv7, aarch64, loongarch64, riscv64, s390x, ppc64le.'
     required: false
     default: 'aarch64'
   distro:

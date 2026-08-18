@@ -1,0 +1,4 @@
+FROM --platform=linux/loong64 registry.alpinelinux.org/img/alpine:latest
+
+COPY ./run-on-arch-install.sh /root/run-on-arch-install.sh
+RUN chmod +x /root/run-on-arch-install.sh && /root/run-on-arch-install.sh

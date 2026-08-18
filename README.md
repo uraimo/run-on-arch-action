@@ -8,13 +8,13 @@
 [![](https://github.com/uraimo/run-on-arch-action/workflows/test/badge.svg)](https://github.com/uraimo/run-on-arch-action)
 
 
-A GitHub Action that executes commands on non-x86 CPU architecture (armv6, armv7, aarch64, s390x, ppc64le) via QEMU.
+A GitHub Action that executes commands on non-x86 CPU architecture (armv6, armv7, aarch64, loongarch64, s390x, ppc64le) via QEMU.
 
 ## Usage
 
 This action requires three input parameters:
 
-* `arch`: CPU architecture: `armv6`, `armv7`, `aarch64`, `riscv64`, `s390x`, or `ppc64le`. See [Supported Platforms](#supported-platforms) for the full matrix.
+* `arch`: CPU architecture: `armv6`, `armv7`, `aarch64`, `loongarch64`, `riscv64`, `s390x`, or `ppc64le`. See [Supported Platforms](#supported-platforms) for the full matrix.
 * `distro`: Linux distribution name: `ubuntu24.04`,`ubuntu22.04`,`ubuntu20.04`, `bookworm`,`bullseye`, `buster`, `stretch`,  `fedora_latest`, `alpine_latest` or `archarm_latest`. See [Supported Platforms](#supported-platforms) for the full matrix.
 * `run`: Shell commands to execute in the container.
 
@@ -162,6 +162,7 @@ This table details the valid `arch`/`distro` combinations:
 | armv6    | stretch, buster, bullseye, bookworm, alpine_latest |
 | armv7    | stretch, buster, bullseye, bookworm, ubuntu20.04, ubuntu22.04 ubuntu24.04,, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest, archarm_latest |
 | aarch64  | stretch, buster, bullseye, bookworm, ubuntu20.04, ubuntu22.04, ubuntu24.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, fedora_latest, alpine_latest, archarm_latest |
+| loongarch64 | alpine_latest |
 | riscv64  | ubuntu20.04, ubuntu22.04, ubuntu24.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, alpine_edge |
 | s390x    | stretch, buster, bullseye, bookworm, ubuntu20.04, ubuntu22.04, ubuntu24.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, alpine_latest |
 | ppc64le  | stretch, buster, bullseye, bookworm, ubuntu20.04, ubuntu22.04, ubuntu24.04, ubuntu_latest, ubuntu_rolling, ubuntu_devel, alpine_latest |
@@ -171,7 +172,7 @@ Using an invalid `arch`/`distro` combination will fail.
 
 ## Architecture emulation
 
-This project makes use of an additional QEMU container to be able to emulate via software architectures like ARM, s390x, ppc64le, etc... that are not natively supported by GitHub. You should keep this into consideration when reasoning about the expected running time of your jobs, there will be a visible impact on performance when compared to a job executed on a vanilla runner.
+This project makes use of an additional QEMU container to be able to emulate via software architectures like ARM, LoongArch64, s390x, ppc64le, etc... that are not natively supported by GitHub. You should keep this into consideration when reasoning about the expected running time of your jobs, there will be a visible impact on performance when compared to a job executed on a vanilla runner.
 
 ## Contributing
 
