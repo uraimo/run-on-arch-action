@@ -13,6 +13,8 @@ jobs:
           # cover each arch and OS at least once.
           - arch: armv6
             distro: bullseye
+          - arch: armv6
+            distro: trixie
           - arch: armv7
             distro: bullseye
           - arch: s390x
